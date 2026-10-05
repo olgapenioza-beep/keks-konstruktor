@@ -1,0 +1,1428 @@
+<!doctype html><html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"></head><body>
+<title>Конструктор кекса</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;700&family=Golos+Text:wght@400;500;600&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+:root{
+  --bg:#ffffff; --surface:#fffaf3; --line:#f1e2cf; --ink:#3a2618; --ink-soft:#8a5a3e;
+  --accent:#eca154; --accent-ink:#9a5a12; --tint:#fff3c4; --up:#2f7d4f; --down:#b0562a;
+  --tip-bg:#3a2618; --tip-ink:#fffaf3; --yes:#f6d7a8; --book:#fde6c3; --base:#ffe9b0; --col:#fbd49a;
+  color-scheme:light;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#1d140d; --surface:#271b12; --line:#3d2b1d; --ink:#f6e9da; --ink-soft:#d3a982;
+    --accent:#eca154; --accent-ink:#f2bb7f; --tint:#3a2c12; --up:#7fc79b; --down:#f0a07a;
+    --tip-bg:#f6e9da; --tip-ink:#1d140d; --yes:#5a3d1c; --book:#463018; --base:#4a3a14; --col:#6b4517;
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#1d140d; --surface:#271b12; --line:#3d2b1d; --ink:#f6e9da; --ink-soft:#d3a982;
+  --accent:#eca154; --accent-ink:#f2bb7f; --tint:#3a2c12; --up:#7fc79b; --down:#f0a07a;
+  --tip-bg:#f6e9da; --tip-ink:#1d140d; --yes:#5a3d1c; --book:#463018; --base:#4a3a14; --col:#6b4517;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font:15px/1.5 "Golos Text",system-ui,sans-serif;margin:0}
+.wrap{max-width:1160px;margin:0 auto;padding-inline:20px;padding-block:28px 64px;display:flex;flex-direction:column;gap:36px}
+h1{font-family:"Unbounded","Golos Text",sans-serif;font-weight:700;font-size:clamp(24px,4vw,34px);line-height:1.15;margin:0;text-wrap:balance}
+h2{font-family:"Unbounded","Golos Text",sans-serif;font-weight:500;font-size:19px;margin:0;text-wrap:balance}
+.lead{color:var(--ink-soft);max-width:72ch;margin:6px 0 0}
+.lead .tools a{display:block;color:inherit;text-decoration:none;border-radius:8px;padding:4px 8px;margin-left:-8px}
+.lead .tools a b{color:var(--ink);text-decoration:underline;text-decoration-color:var(--accent);text-underline-offset:3px}
+.lead .tools a:hover,.lead .tools a:focus-visible{background:var(--surface);outline:none}
+html{scroll-behavior:smooth}
+.lead p{margin:0 0 8px}.lead .tools{margin:0 0 8px;padding-left:1.4em}.lead .tools li{margin:2px 0}
+.label{font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-soft);font-weight:600}
+nav.layers{position:sticky;top:env(safe-area-inset-top,0px);z-index:10;background:var(--bg);border-bottom:1px solid var(--line);padding-block:10px;display:flex;flex-wrap:wrap;gap:6px}
+nav.layers a{color:var(--ink);text-decoration:none;font-size:13px;padding:5px 10px;border:1px solid var(--line);border-radius:999px;background:var(--surface)}
+nav.layers a:hover,nav.layers a:focus-visible{border-color:var(--accent);outline:none}
+nav.layers a b{color:var(--accent-ink);font-family:"JetBrains Mono",monospace;margin-right:4px}
+section.layer{display:flex;flex-direction:column;gap:12px;scroll-margin-top:64px}
+.head{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap}
+.num-badge{font-family:"JetBrains Mono",monospace;font-weight:600;color:var(--accent-ink);font-size:15px}
+.what{color:var(--ink-soft);font-size:14px;max-width:80ch;margin:0}
+.ringbox{display:grid;grid-template-columns:minmax(0,360px) minmax(0,1fr);gap:24px;align-items:center;margin:12px 0}
+@media (max-width:760px){.ringbox{grid-template-columns:1fr}}
+.rings{width:100%;max-width:400px;height:auto;display:block;margin:0 auto}
+.rings .ring ellipse,.rings .ring circle,.rings .ring path{fill:var(--c1);stroke:var(--c2);stroke-width:1.2;transition:fill .15s,opacity .15s}
+.rings .ring path{opacity:.92}
+.rings .pn{font:700 12px "JetBrains Mono",monospace;fill:var(--accent-ink);pointer-events:none}
+.rings .ring:hover ellipse,.rings .ring.hl ellipse,.rings .ring:hover circle,.rings .ring.hl circle,.rings .ring:hover path,.rings .ring.hl path{fill:var(--c2);opacity:1}
+.rings .rl{font:600 12px "Golos Text",system-ui,sans-serif;fill:var(--ink);pointer-events:none}
+.rings .rl.c{font:700 13px "Unbounded","Golos Text",sans-serif}
+.ringlist{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px}
+.ringlist a{display:flex;gap:10px;align-items:flex-start;padding:6px 10px;border-radius:10px;color:var(--ink);text-decoration:none;font-size:14px;line-height:1.4;background:none}
+.ringlist a i{flex:0 0 14px;height:14px;border-radius:50%;margin-top:3px;background:var(--c2)}
+.ringlist a:hover,.ringlist a.hl{background:var(--c1)}
+.stair{display:flex;align-items:flex-end;gap:8px;margin:14px 0 10px;padding-bottom:4px;border-bottom:3px solid var(--line)}
+.stair .st{flex:1 1 0;min-width:0;display:flex;flex-direction:column;gap:4px;padding:10px 12px;border-radius:12px 12px 0 0;background:var(--c1);border:1px solid var(--line);border-bottom:none;color:var(--ink);text-decoration:none;min-height:calc(80px + var(--k)*32px);transition:background .15s,transform .15s}
+.stair .st.base{border-style:dashed}
+.stair .st:hover,.stair .st:focus-visible{background:var(--c2);transform:translateY(-3px);outline:none}
+.stair .stn{font:600 11px "JetBrains Mono",monospace;letter-spacing:.06em;text-transform:uppercase;color:var(--accent-ink)}
+.stair .st b{font:700 16px "Unbounded","Golos Text",sans-serif}
+.stair .std{font-size:13px;line-height:1.35;color:var(--ink-soft);margin-top:auto}
+@media (max-width:760px){.stair{flex-direction:column;align-items:stretch;border-bottom:none}.stair .st{min-height:0;border-radius:12px;border:1px solid var(--line);margin-left:calc(var(--k)*12px)}}
+.formnote{font-size:14px}
+.what.stairs{max-width:none}.what.stairs>p{max-width:80ch}
+.what.stairs p{margin:0 0 6px}.what.stairs ul,.what.stairs ol{margin:0 0 8px;padding-left:1.3em;display:flex;flex-direction:column;gap:4px}
+.num-badge{white-space:nowrap}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip input{position:absolute;opacity:0;pointer-events:none}
+.chip span{display:inline-block;padding:6px 11px;border:1px solid var(--line);border-radius:999px;cursor:pointer;background:var(--bg);font-size:14px}
+.chip input:checked+span{background:var(--accent);border-color:var(--accent);color:#3a2618;font-weight:600}
+.chip input:focus-visible+span{outline:2px solid var(--accent-ink);outline-offset:2px}
+.tablebox{overflow-x:auto;border:1px solid var(--line);border-radius:12px}
+table{width:100%;border-collapse:collapse;font-variant-numeric:tabular-nums}
+th,td{padding:9px 12px;text-align:left;border-bottom:1px solid var(--line);vertical-align:top}
+thead th{background:var(--surface);font-weight:600;font-size:13px;vertical-align:bottom}
+thead th small{display:block;font-weight:400;color:var(--ink-soft);font-size:12px}
+td.n,th.n{text-align:right;font-family:"JetBrains Mono",ui-monospace,monospace;font-size:13.5px;white-space:nowrap}
+td.ch{background:var(--tint);font-weight:700}
+td.zero{color:var(--ink-soft)}
+tr.total td{font-weight:600;background:var(--surface);border-bottom:none}
+.h-lemon{--c1:#fff6c9;--c2:#ffe27a}
+.h-base{--c1:#fbf7ef;--c2:#ece0c8}
+.h-noisette{--c1:#fde8d2;--c2:#f5bf86}
+.h-pist{--c1:#eaf3d6;--c2:#c8e09a}
+.h-almond{--c1:#f6ede2;--c2:#e6cfb0}
+.h-hazel{--c1:#f1e3d2;--c2:#d9b48a}
+.h-cocoa{--c1:#efe0d9;--c2:#cfa594}
+.h-tea{--c1:#e7ebf6;--c2:#bcc7e8}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .h-lemon{--c1:#3a3412;--c2:#6b5c14}
+:root:not([data-theme="light"]) .h-base{--c1:#2a211a;--c2:#4a3d30}
+:root:not([data-theme="light"]) .h-noisette{--c1:#3a2716;--c2:#6e4522}
+:root:not([data-theme="light"]) .h-pist{--c1:#26301a;--c2:#45582a}
+:root:not([data-theme="light"]) .h-almond{--c1:#33291f;--c2:#5b4733}
+:root:not([data-theme="light"]) .h-hazel{--c1:#33261a;--c2:#5f442a}
+:root:not([data-theme="light"]) .h-cocoa{--c1:#33241f;--c2:#5e3f33}
+:root:not([data-theme="light"]) .h-tea{--c1:#222838;--c2:#3a4463}}
+:root[data-theme="dark"] .h-lemon{--c1:#3a3412;--c2:#6b5c14}
+:root[data-theme="dark"] .h-base{--c1:#2a211a;--c2:#4a3d30}
+:root[data-theme="dark"] .h-noisette{--c1:#3a2716;--c2:#6e4522}
+:root[data-theme="dark"] .h-pist{--c1:#26301a;--c2:#45582a}
+:root[data-theme="dark"] .h-almond{--c1:#33291f;--c2:#5b4733}
+:root[data-theme="dark"] .h-hazel{--c1:#33261a;--c2:#5f442a}
+:root[data-theme="dark"] .h-cocoa{--c1:#33241f;--c2:#5e3f33}
+:root[data-theme="dark"] .h-tea{--c1:#222838;--c2:#3a4463}
+td.h,th.h{background:var(--c1)}
+td.ch.h,td.c.y.h,td.c.b.h,th.h.colsel{background:var(--c2)}
+.colhover{filter:brightness(.94)}
+th.colsel,td.colsel{box-shadow:inset 3px 0 0 var(--accent),inset -3px 0 0 var(--accent)}
+thead th.colsel{box-shadow:inset 3px 0 0 var(--accent),inset -3px 0 0 var(--accent),inset 0 4px 0 var(--accent)}
+tbody tr:last-child td.colsel{box-shadow:inset 3px 0 0 var(--accent),inset -3px 0 0 var(--accent),inset 0 -3px 0 var(--accent)}
+td.colsel.ch{font-weight:700}
+th.pickable{cursor:pointer;user-select:none}
+th.pickable:hover{color:var(--accent-ink)}
+.selbar{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.delta{display:block;font-size:11.5px}
+.delta.up{color:var(--up)} .delta.down{color:var(--down)}
+table.m{min-width:640px}
+table.m td.c{text-align:center;font-weight:600;width:1%;white-space:nowrap}
+td.c.y{background:var(--yes)} td.c.d{background:var(--book)} td.c.b{background:var(--base)}
+td.c.no{color:var(--ink-soft);font-weight:400}
+td.c.n{color:var(--ink-soft);font-weight:400}
+.tip{position:relative;cursor:help;outline:none}
+.tip.u{border-bottom:1px dotted var(--ink-soft)}
+.tip:focus-visible{outline:2px solid var(--accent-ink);outline-offset:2px;border-radius:3px}
+.tip .bubble{display:none;position:absolute;z-index:20;left:0;top:calc(100% + 8px);width:min(320px,76vw);background:var(--tip-bg);color:var(--tip-ink);padding:10px 12px;border-radius:8px;font:400 13px/1.45 "Golos Text",system-ui,sans-serif;text-align:left;white-space:normal;box-shadow:0 6px 24px rgba(0,0,0,.18)}
+td.n .tip .bubble,td.c .tip .bubble{left:auto;right:0}
+.tip:hover .bubble,.tip:focus .bubble{display:block}
+.src{display:block;margin-top:6px;opacity:.8;font-size:12px}
+.key{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:13px;color:var(--ink-soft)}
+.key i{display:inline-block;min-width:22px;text-align:center;font-style:normal;font-weight:600;color:var(--ink);border-radius:4px;padding:0 4px;margin-right:4px}
+.key i.y{background:var(--yes)} .key i.d{background:var(--book)} .key i.b{background:var(--base)}
+.subh{margin:8px 0 0;font:600 15px "Golos Text",system-ui,sans-serif;color:var(--ink)}
+.list{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:10px}
+.item{border:1px solid var(--line);border-radius:10px;padding:10px 12px;font-size:14px;display:flex;flex-direction:column;gap:4px}
+.item b{font-weight:600}
+.item .s{color:var(--ink-soft);font-size:12px}
+.builder{border:2px solid var(--accent);border-radius:14px;padding:16px;display:flex;flex-direction:column;gap:14px;background:var(--surface)}
+.pick{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px}
+.pick label{display:flex;flex-direction:column;gap:4px;font-size:12px;color:var(--ink-soft);font-weight:600;letter-spacing:.04em;text-transform:uppercase}
+select{font:15px "Golos Text",system-ui,sans-serif;padding:8px 10px;border-radius:8px;border:1px solid var(--line);background:var(--bg);color:var(--ink)}
+select:focus-visible{outline:2px solid var(--accent-ink)}
+.card{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:18px}
+@media (max-width:720px){.card{grid-template-columns:1fr}}
+.card h3{margin:0 0 6px;font-size:15px}
+.card ul{margin:0;padding-left:18px;display:flex;flex-direction:column;gap:4px;font-size:14px}
+.ok{color:var(--up)} .warn{color:var(--down)}
+.foot{display:flex;flex-direction:column;gap:6px;font-size:13px;color:var(--ink-soft)}
+.foot b{color:var(--ink)}
+.scale{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+@media (prefers-reduced-motion: reduce){*{transition:none!important}}
+
+.h-orange{--c1:#ffeedd;--c2:#ffc98f}
+.h-vanilla{--c1:#fbf4e4;--c2:#efdcae}
+.h-mint{--c1:#e5f4ee;--c2:#a9dcc7}
+.h-spice{--c1:#f6e4dc;--c2:#e2b39d}
+@media (prefers-color-scheme: dark){
+:root:not([data-theme="light"]) .h-orange{--c1:#3a2815;--c2:#6e4a1e}
+:root:not([data-theme="light"]) .h-vanilla{--c1:#332c1d;--c2:#5a4c2c}
+:root:not([data-theme="light"]) .h-mint{--c1:#1b2e27;--c2:#2f5446}
+:root:not([data-theme="light"]) .h-spice{--c1:#35231c;--c2:#5f3a2c}}
+:root[data-theme="dark"] .h-orange{--c1:#3a2815;--c2:#6e4a1e}
+:root[data-theme="dark"] .h-vanilla{--c1:#332c1d;--c2:#5a4c2c}
+:root[data-theme="dark"] .h-mint{--c1:#1b2e27;--c2:#2f5446}
+:root[data-theme="dark"] .h-spice{--c1:#35231c;--c2:#5f3a2c}
+tr.rowsel td{box-shadow:inset 0 3px 0 var(--accent),inset 0 -3px 0 var(--accent);font-weight:600}
+tr.rowsel td:first-child{box-shadow:inset 3px 0 0 var(--accent),inset 0 3px 0 var(--accent),inset 0 -3px 0 var(--accent)}
+tr.pickrow{cursor:pointer}
+tr.pickrow:focus-visible{outline:2px solid var(--accent-ink)}
+.route{margin-top:22px;display:grid;grid-template-columns:repeat(7,minmax(84px,1fr));row-gap:6px;overflow-x:auto;padding-bottom:4px}
+.rgrp{font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-soft);font-weight:600;text-align:center;border-bottom:1.5px solid var(--line);padding-bottom:4px;margin:0 10px}
+.route ol{grid-column:1/-1;display:grid;grid-template-columns:subgrid;list-style:none;margin:0;padding:0;position:relative}
+.route ol::before{content:"";position:absolute;left:calc(100%/14);right:calc(100%/14);top:15px;height:2px;background:var(--accent);opacity:.45}
+.route li a{position:relative;display:flex;flex-direction:column;align-items:center;gap:6px;text-decoration:none;color:var(--ink);font-size:13px;line-height:1.25;text-align:center;padding:0 4px}
+.route li i{font-style:normal;width:32px;height:32px;border-radius:50%;display:grid;place-items:center;background:var(--bg);border:2px solid var(--accent);font:600 13px "JetBrains Mono",monospace;color:var(--accent-ink);transition:background .15s}
+.route li a:hover i,.route li a:focus-visible i{background:var(--accent);color:#3a2618}
+.route li a:focus-visible{outline:none}
+.flow{display:flex;flex-wrap:wrap;gap:6px;align-items:center;font-size:14px;margin-top:12px}
+.flow .step{color:var(--ink);text-decoration:none;cursor:pointer}
+.flow .step:hover,.flow .step:focus-visible{border-color:var(--accent);background:var(--tint);outline:none}
+.flow span.step,.flow a.step{padding:5px 10px;border-radius:8px;background:var(--surface);border:1px solid var(--line)}
+.flow span.arr{color:var(--ink-soft)}
+.h-cherry{--c1:#fbe6e8;--c2:#eeaab4}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .h-cherry{--c1:#38201f;--c2:#663036}}
+:root[data-theme="dark"] .h-cherry{--c1:#38201f;--c2:#663036}
+.wheelbox{display:grid;grid-template-columns:minmax(0,340px) minmax(0,1fr);gap:24px;align-items:center}
+@media (max-width:720px){.wheelbox{grid-template-columns:1fr}}
+#donut{width:100%;max-width:340px;height:auto;display:block;margin:0 auto}
+#donut .seg path{fill:var(--c1);stroke:var(--bg);stroke-width:2;transition:fill .15s}
+#donut .seg{cursor:pointer;outline:none}
+#donut .seg:hover path,#donut .seg:focus-visible path{fill:var(--c2)}
+#donut .seg.on path{fill:var(--c2);stroke:var(--accent);stroke-width:3}
+#donut .seg text{font:600 13px "Golos Text",system-ui,sans-serif;fill:var(--ink);pointer-events:none}
+#donut text.core{font:700 26px "Unbounded","Golos Text",sans-serif;fill:var(--ink)}
+.wheelside{display:flex;flex-direction:column;gap:10px}
+.rcard{border:1px solid var(--line);border-radius:14px;padding:12px 14px;display:flex;flex-direction:column;gap:8px;background:var(--surface)}
+.rcard h3{margin:0 0 2px;font:700 17px "Unbounded","Golos Text",sans-serif;background:none!important}
+.rcard .rrow{display:grid;grid-template-columns:150px 1fr;gap:10px;align-items:baseline;font-size:14px}
+.rcard .rrow b{font-weight:600}
+@media (max-width:520px){.rcard .rrow{grid-template-columns:1fr;gap:2px}}
+.rlist{margin:0;padding-left:22px;display:flex;flex-direction:column;gap:6px}
+.rlist li{cursor:pointer;padding:4px 8px;border-radius:8px}
+.rlist li.on{background:var(--surface);font-weight:600;outline:2px solid var(--accent)}
+.rlist .dot{display:inline-block;width:12px;height:12px;border-radius:50%;margin-right:8px;vertical-align:-1px;background:var(--c2)}
+tr.grp td{background:var(--bg);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-soft);font-weight:600;padding-top:14px}
+.evo{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px;align-items:start}
+.evo .plate{position:relative;border-radius:14px;padding:14px 16px 16px;display:flex;flex-direction:column;gap:8px;background:var(--c1);border:1px solid var(--line)}
+.evo .pnum{font:600 14px "JetBrains Mono",monospace;color:var(--accent-ink);margin-right:8px;vertical-align:2px}
+.evo h3{margin:0;font:700 18px "Unbounded","Golos Text",sans-serif;color:var(--ink)}
+.evo .pdesc{margin:0 0 4px;font-size:14px;color:var(--ink-soft)}
+.evo .alt-h{font-size:11px;color:var(--ink-soft);text-transform:uppercase;letter-spacing:.06em;font-weight:600}
+.evo .alts{display:flex;flex-wrap:wrap;gap:5px}
+.evo .vchip{font:500 13px "Golos Text",system-ui,sans-serif;padding:4px 10px;border-radius:999px;background:var(--bg);border:1px dashed var(--c2);color:var(--ink);cursor:pointer}
+.evo .vchip.sel{background:var(--c2);border-style:solid;font-weight:600}
+.evo .vchip.open,.evo .vchip:hover,.evo .vchip:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
+.evo .none{font-size:13px;color:var(--ink-soft)}
+.evo .vinfo{margin-top:4px;padding:10px 12px;border-radius:10px;background:var(--bg);border:1px solid var(--accent);font-size:13.5px;line-height:1.45;display:flex;flex-direction:column;gap:4px}
+.pick input[type=number]{font:15px "Golos Text",system-ui,sans-serif;padding:8px 10px;border-radius:8px;border:1px solid var(--line);background:var(--bg);color:var(--ink);width:100%}
+.custom{display:contents}
+fieldset.adds{grid-column:1/-1;border:1px solid var(--line);border-radius:10px;padding:10px 12px;display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:6px 14px}
+fieldset.adds legend{font-size:12px;color:var(--ink-soft);font-weight:600;text-transform:uppercase;letter-spacing:.04em}
+.addrow{display:grid;grid-template-columns:auto 1fr 80px;gap:8px;align-items:center;font-size:14px;text-transform:none;letter-spacing:0;font-weight:400;color:var(--ink)}
+.addrow input[type=number]{padding:4px 6px}
+.calcsum{display:flex;flex-wrap:wrap;gap:8px 18px;font-size:15px}
+table.calcT{min-width:320px}
+tr.chg td{font-weight:700}
+#calcOut{display:flex;flex-direction:column;gap:10px}
+fieldset.adds label{display:flex;flex-direction:column;gap:4px;font-size:12px;color:var(--ink-soft);font-weight:600;letter-spacing:.04em;text-transform:uppercase}
+fieldset.adds label[hidden]{display:none}
+
+.tablebox th:first-child,.tablebox td:first-child{position:sticky;left:0;z-index:2;background:var(--bg);box-shadow:inset -1px 0 0 var(--line)}
+.tablebox thead th:first-child{z-index:3;background:var(--surface)}
+.tablebox tr.grp td:first-child{position:sticky;left:0}
+.tablebox tr.total td:first-child{background:var(--surface)}
+.tablebox td:first-child{min-width:170px;max-width:240px}
+.tip .bubble{display:none!important}
+#floatTip{position:fixed;z-index:1000;max-width:min(380px,88vw);font-size:12.5px!important;background:var(--tip-bg);color:var(--tip-ink);padding:10px 12px;border-radius:8px;font:400 13px/1.45 "Golos Text",system-ui,sans-serif;box-shadow:0 6px 24px rgba(0,0,0,.2);pointer-events:none}
+#mainT tr.inrec td:first-child{background:var(--c2);font-weight:600;box-shadow:inset 4px 0 0 var(--accent)}
+#mainT.focus td:not(.keep),#mainT.focus th:not(.keep){opacity:.28;filter:saturate(.3)}
+#mainT.focus tr.grp td{opacity:1;filter:none}
+#mainT td,#mainT th{transition:opacity .2s,filter .2s}
+.tabs{display:flex;gap:4px;border-bottom:2px solid var(--line)}
+.tabs button{font:600 14px "Golos Text",system-ui,sans-serif;padding:8px 16px;border:1px solid var(--line);border-bottom:none;border-radius:10px 10px 0 0;background:var(--surface);color:var(--ink-soft);cursor:pointer;margin-bottom:-2px}
+.tabs button[aria-selected="true"]{background:var(--bg);color:var(--ink);border-color:var(--accent);border-bottom:2px solid var(--bg)}
+.tabs button:focus-visible,.tabs .tabw:focus-visible{outline:2px solid var(--accent-ink)}
+.tabs .tabw{display:flex;align-items:center;gap:6px;font:600 14px "Golos Text",system-ui,sans-serif;padding:5px 12px;border:1px solid var(--line);border-bottom:none;border-radius:10px 10px 0 0;background:var(--surface);color:var(--ink-soft);cursor:pointer;margin-bottom:-2px}
+.tabs .tabw[aria-selected="true"]{background:var(--bg);color:var(--ink);border-color:var(--accent);border-bottom:2px solid var(--bg)}
+.tabs .tabw input{width:84px;font:600 14px "JetBrains Mono",monospace;padding:4px 6px;border:1px solid var(--accent);border-radius:6px;background:var(--bg);color:var(--ink);text-align:right}
+.formpanel{border:2px solid var(--accent);border-radius:14px;padding:14px;background:var(--surface);max-width:260px}
+.formpanel input[type=number]{font:15px "Golos Text",system-ui,sans-serif;padding:8px 10px;border-radius:8px;border:1px solid var(--line);background:var(--bg);color:var(--ink);width:100%}
+.formpanel label[hidden]{display:none}
+.citv{display:flex;gap:4px;margin-top:6px;flex-wrap:wrap}
+.cit{font:500 12px "Golos Text",system-ui,sans-serif;padding:2px 9px;border-radius:999px;border:1px solid var(--line);cursor:pointer;color:var(--ink);background:var(--c1)}
+.cit.on{background:var(--c2);border-color:var(--accent);font-weight:600}
+.scrollhint{font-size:12px;color:var(--ink-soft)}
+
+#mainT,#doughT,table.m{table-layout:fixed;width:auto}
+#mainT th,#doughT th,table.m th{white-space:normal;hyphens:auto;-webkit-hyphens:auto;overflow-wrap:break-word;line-height:1.25;vertical-align:bottom}
+#mainT th:first-child,#doughT th:first-child,table.m th:first-child{width:200px}
+#mainT th:not(:first-child),#doughT th:not(:first-child){width:122px}
+table.m th:not(:first-child){width:86px}
+table.m th.n{width:100px}
+#mainT td:not(:first-child){white-space:normal;hyphens:auto;-webkit-hyphens:auto}
+#mainT thead th,#doughT thead th{padding-top:12px;vertical-align:bottom;overflow:visible}
+
+.graphbox{display:grid;grid-template-columns:minmax(0,1fr) 240px;gap:18px;align-items:start}
+@media (max-width:760px){.graphbox{grid-template-columns:1fr}}
+#fgraph{width:100%;height:auto;display:block;background:var(--surface);border:1px solid var(--line);border-radius:14px}
+#fgraph line{stroke:var(--line);stroke-width:1.2}
+#fgraph line.hl{stroke:var(--accent);stroke-width:2.4}
+#fgraph line.dim{opacity:.12}
+#fgraph .gn{cursor:pointer;outline:none}
+#fgraph .gn circle{stroke:var(--bg);stroke-width:2}
+#fgraph .gn text{font:500 12px "Golos Text",system-ui,sans-serif;fill:var(--ink);pointer-events:none}
+#fgraph .gn.dim{opacity:.18}
+#fgraph .gn.sel circle{stroke:var(--accent);stroke-width:4}
+#fgraph .gn.nb text{font-weight:700}
+#fgraph .gn:focus-visible circle{stroke:var(--accent-ink);stroke-width:4}
+#fgraph .core circle{fill:var(--accent)}
+#fgraph .core text{font:700 16px "Unbounded","Golos Text",sans-serif;fill:#3a2618}
+.graphside{display:flex;flex-direction:column;gap:10px}
+.graphside .alts{display:flex;flex-wrap:wrap;gap:4px}
+.graphside .alts span{font-size:13px;padding:3px 8px;border-radius:999px;background:var(--bg);border:1px solid var(--line)}
+.glegend{display:flex;flex-direction:column;gap:4px;font-size:12px;color:var(--ink-soft)}
+.glegend i{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:6px;vertical-align:0}
+
+#fgraph{background:radial-gradient(circle at 50% 50%,var(--bg) 0%,var(--surface) 70%)}
+#fgraph .orbit{fill:none;stroke:var(--line);stroke-width:1;stroke-dasharray:2 6}
+#fgraph path.e{fill:none;stroke:var(--ink-soft);stroke-opacity:.16;stroke-width:1.1;transition:stroke-opacity .2s,stroke-width .2s}
+#fgraph path.e.hl{stroke:var(--accent);stroke-opacity:.95;stroke-width:2.2}
+#fgraph path.e.dim{stroke-opacity:.04}
+#fgraph .gn{transition:opacity .2s}
+#fgraph .gn .halo{fill:var(--c);opacity:.18;transition:opacity .2s,r .2s}
+#fgraph .gn .dot{stroke:var(--bg);stroke-width:2.5}
+#fgraph .gn text{font:600 12px "Golos Text",system-ui,sans-serif;fill:var(--ink);paint-order:stroke;stroke:var(--surface);stroke-width:4px;stroke-linejoin:round}
+#fgraph .gn:hover .halo,#fgraph .gn.nb .halo{opacity:.35}
+#fgraph .gn.sel .halo{opacity:.55}
+#fgraph .gn.sel .dot{stroke:var(--accent);stroke-width:3.5}
+#fgraph .gn.dim{opacity:.16}
+#fgraph .core .ring{fill:none;stroke:var(--accent);stroke-opacity:.35;stroke-width:1.5}
+#fgraph .core .disc{fill:url(#coreGrad)}
+#fgraph .core text{font:700 17px "Unbounded","Golos Text",sans-serif;fill:#3a2618;stroke:none}
+
+
+/* ---------- отметки сочетаний: зелёная основа, жёлтое «сочетается», красный крестик ---------- */
+:root{--mk-base:#bfe3b4;--mk-base-ink:#1f5a1a;--mk-yes:#ffe27a;--mk-yes-ink:#5a4300;--mk-no:#c0392b}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--mk-base:#2f5a2a;--mk-base-ink:#d6f2cf;--mk-yes:#6b5c14;--mk-yes-ink:#fff3c4;--mk-no:#ff8a7a}}
+:root[data-theme="dark"]{--mk-base:#2f5a2a;--mk-base-ink:#d6f2cf;--mk-yes:#6b5c14;--mk-yes-ink:#fff3c4;--mk-no:#ff8a7a}
+td.c.b,td.c.b.h{background:var(--mk-base)!important;color:var(--mk-base-ink)}
+td.c.y,td.c.y.h{background:var(--mk-yes)!important;color:var(--mk-yes-ink)}
+td.c.no{color:var(--mk-no)!important;font-weight:700}
+.key i.b{background:var(--mk-base);color:var(--mk-base-ink)} .key i.y{background:var(--mk-yes);color:var(--mk-yes-ink)} .key i.no{color:var(--mk-no);font-weight:700}
+#fgraph .gn text{font-size:15px;pointer-events:auto;cursor:pointer}
+/* ---------- карта сочетаний: на всю страницу, пояснения снизу ---------- */
+#graph .graphbox{display:flex;flex-direction:column;gap:16px;width:100%}
+#graph #fgraph{width:100%;height:auto;aspect-ratio:1/1}
+#graph .graphside{width:100%;display:flex;flex-direction:column;gap:12px}
+#graph .graphside #gTitle{grid-column:1/-1;font-size:14px}
+#graph .graphside .alts span{font-size:14px;padding:4px 10px}
+#graph .glegend{flex-direction:row;flex-wrap:wrap;gap:6px 20px;font-size:13px;width:100%}
+
+
+
+.fillbox{display:grid;grid-template-columns:minmax(0,1.4fr) minmax(0,1fr);gap:16px;align-items:start}
+@media (max-width:760px){.fillbox{grid-template-columns:1fr}}
+.fillbox .pick label[hidden]{display:none}
+.fillres{display:flex;flex-direction:column;gap:10px}
+.fillres .big{font:700 30px "Unbounded","Golos Text",sans-serif;color:var(--ink)}
+.fillres .lbl{font-size:13px;color:var(--ink-soft)}
+.fillres .card2{border:1px solid var(--line);border-radius:12px;padding:12px 14px;background:var(--bg)}
+
+/* карточка рецепта: продукты с весом и долей + диаграмма, шаги одной колонкой */
+.ptab tr.phead td{font-size:12px;color:var(--ink-soft);border-bottom:1px solid var(--line)}
+.ptab td.pp{color:var(--ink-soft);width:64px}
+.pchart{display:flex;flex-direction:column;gap:8px}
+.pchart svg{width:100%;max-width:260px;height:auto}
+.pchart .pct1{font:700 15px "Unbounded","Golos Text",sans-serif;fill:var(--ink)}
+.pchart .pct2{font:500 10px "Golos Text",sans-serif;fill:var(--ink-soft)}
+.pleg{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:4px;font-size:13px}
+.pleg li{display:flex;align-items:center;gap:8px}
+.pleg i{width:12px;height:12px;border-radius:3px;flex:0 0 12px}
+.pleg b{margin-left:auto;font-weight:600;font-variant-numeric:tabular-nums}
+@media screen{
+  .pcard .pgrid{display:flex;flex-direction:column;gap:24px}
+  .pcard .ptop{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(220px,1fr);gap:28px;align-items:start}
+  .pcard .pL{display:flex;flex-direction:column;gap:14px}
+  .pcard .pchart{position:sticky;top:16px}
+  .pcard .psteps{display:flex;flex-direction:column;gap:14px;max-width:80ch}
+}
+@media screen and (max-width:760px){.pcard .ptop{grid-template-columns:1fr}.pcard .pchart{position:static}}
+
+/* ---------- закладки ---------- */
+.tabsbar{position:sticky;top:env(safe-area-inset-top,0px);z-index:30;background:var(--bg);display:flex;gap:6px;padding-block:10px;border-bottom:2px solid var(--line);overflow-x:auto;scrollbar-width:thin;margin-top:-12px}
+.tabsbar button{flex:0 0 auto;font:600 15px "Golos Text",system-ui,sans-serif;padding:10px 16px;border:1px solid var(--line);border-radius:12px 12px 0 0;background:var(--surface);color:var(--ink-soft);cursor:pointer;white-space:nowrap}
+.tabsbar button[aria-selected="true"]{background:var(--accent);border-color:var(--accent);color:#3a2618}
+.tabsbar button:focus-visible{outline:2px solid var(--accent-ink);outline-offset:2px}
+.tabpanel{display:flex;flex-direction:column;gap:36px}
+.tabpanel[hidden]{display:none!important}
+nav.layers{position:static}
+nav.layers button{font:600 14px "Golos Text",system-ui,sans-serif;padding:7px 12px;border:1px solid var(--line);border-radius:999px;background:var(--surface);color:var(--ink);cursor:pointer}
+nav.layers button b{color:var(--accent-ink);font-family:"JetBrains Mono",monospace;margin-right:4px}
+nav.layers button[aria-selected="true"]{background:var(--accent);border-color:var(--accent);color:#3a2618}
+nav.layers button[aria-selected="true"] b{color:#3a2618}
+section.step[hidden]{display:none!important}
+.mobpick,.mobnote,#gChips{display:none}
+/* ---------- телефон ---------- */
+@media (max-width:760px){
+  .tabsbar button{font-size:14px;padding:9px 12px}
+  #mainT .mh,#doughT .mh,table.m .mh{display:none}
+  #mainT,#doughT,table.m{table-layout:auto;min-width:0!important;width:100%}
+  #mainT th:first-child,#doughT th:first-child,table.m th:first-child{width:auto}
+  #aromaT,#formT{min-width:0!important}
+  .mobpick{display:flex;flex-wrap:wrap;gap:6px}
+  .mobpick button{font:500 14px "Golos Text",system-ui,sans-serif;padding:7px 12px;border-radius:999px;border:1px solid var(--line);background:var(--c1);color:var(--ink);cursor:pointer}
+  .mobpick button.on{background:var(--c2);border-color:var(--accent);font-weight:600}
+  .mobnote{display:block;font-size:13px;color:var(--ink-soft);margin:0}
+  #fgraph{display:none}
+  #gChips{display:flex;flex-direction:column;gap:10px}
+  #gChips .gg{display:flex;flex-direction:column;gap:5px}
+  #gChips .gg>span{font-size:12px;font-weight:600;color:var(--ink-soft);text-transform:uppercase;letter-spacing:.06em}
+  #gChips .gg div{display:flex;flex-wrap:wrap;gap:5px}
+  #gChips button{font:500 14px "Golos Text",system-ui,sans-serif;padding:6px 11px;border-radius:999px;border:1px solid var(--line);background:var(--bg);color:var(--ink);cursor:pointer;box-shadow:inset 3px 0 0 var(--c)}
+  #gChips button.on{background:var(--accent);border-color:var(--accent);color:#3a2618}
+  #gChips button.nb{background:var(--tint);font-weight:600}
+}
+/* ---------- рецепты для печати ---------- */
+.pbar{display:flex;flex-wrap:wrap;gap:10px 18px;align-items:center}
+.pbar .citv{margin:0}
+.pbar .cit{font-size:14px;padding:6px 14px}
+.pbar label{display:flex;align-items:center;gap:6px;font-size:14px;color:var(--ink-soft)}
+.pbar input{width:96px;font:inherit;padding:5px 8px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--ink)}
+.pcopy{font:600 14px "Golos Text",system-ui,sans-serif;padding:8px 16px;border-radius:10px;border:1px solid var(--accent);background:var(--accent);color:#3a2618;cursor:pointer}
+.pcopy:focus-visible,.pbar input:focus-visible,.pbar .cit:focus-visible{outline:2px solid var(--accent-ink);outline-offset:2px}
+.pmsg{font-size:13px;color:var(--up)}
+.pcard{border:1px solid var(--line);border-radius:14px;background:var(--surface);padding:20px clamp(14px,3vw,28px);display:flex;flex-direction:column;gap:16px}
+.pcard h3{font-family:"Unbounded","Golos Text",sans-serif;font-weight:700;font-size:22px;margin:0;text-wrap:balance}
+.pcard h4{font-family:"Unbounded","Golos Text",sans-serif;font-weight:500;font-size:15px;margin:0 0 6px}
+.pcard .psub{color:var(--ink-soft);margin:-8px 0 0;font-size:14px}
+.pgrid{display:grid;grid-template-columns:minmax(0,340px) minmax(0,1fr);gap:24px;align-items:start}
+@media (max-width:760px){.pgrid{grid-template-columns:1fr}}
+.pcol{display:flex;flex-direction:column;gap:16px}
+.ptab{width:100%;border-collapse:collapse;font-size:14px}
+.ptab td{padding:4px 0;border-bottom:1px dotted var(--line)}
+.ptab td.n{padding-left:12px}
+.ptab tr.ptot td{font-weight:700;border-bottom:none}
+.pcard ol,.pcard ul{margin:0;padding-left:1.3em;display:flex;flex-direction:column;gap:6px;max-width:68ch}
+.pcard .pbox{border:1px solid var(--accent);border-radius:10px;padding:8px 12px;margin-top:8px;background:var(--bg);color:var(--ink)}
+.pcard .pnote{font-size:13px;color:var(--ink-soft);margin:4px 0 0;max-width:68ch}
+@media print{
+  body{background:#fff;color:#000}
+  .wrap{padding:0;gap:0}
+  .wrap>*:not(.tabpanel[data-pane="print"]){display:none!important}
+  .tabpanel[data-pane="print"]{display:block!important}
+  .tabpanel[data-pane="print"]>*:not(#print){display:none!important}
+  #print>.head,#print>.what,#print>.pbar{display:none!important}
+  .pcard{border:none;background:#fff;padding:0}
+  .pgrid{grid-template-columns:240px 1fr;gap:18px}
+  .pchart,.ptab .pp,.ptab tr.phead,.pdol{display:none!important}
+  .ptop{display:block}
+  @page{size:A4;margin:9mm 10mm}
+  .pcard{gap:8px}.pcol{gap:9px}.pcard h3{font-size:20px}.pcard h4{font-size:12.5px;margin:0 0 3px}
+  .ptab td{padding:1.5px 0}.pcard ol,.pcard ul{gap:2px}.pcard .psub{margin:-4px 0 0;font-size:11.5px}
+  .ptab,.pcard li,.pnote{font-size:10.4px!important;line-height:1.33}
+}
+</style>
+
+<div class="wrap" lang="ru">
+  <header>
+    <div class="label">Совместный запек · кекс</div>
+    <h1>Конструктор кекса</h1>
+    <div class="lead">
+      <p><b>Здравствуйте! Я — конструктор кекса.</b></p>
+      <p>Смотрите: у нас был всего один рецепт кекса. А из него получились пять разных кексов: лимонный, шоколадный с вишней, шоколадный с фундуком и грушей, пряный и ванильный.</p>
+      <p>И это только начало. В конструкторе 11 ароматов, 4 варианта теста, 16 добавок, 16 пропиток и 11 покрытий. Из одного теста вы соберёте целую коробку разных кексов — себе, в подарок или на продажу.</p>
+      <p>Разделы конструктора лежат на закладках вверху страницы, как в картотеке. Нажмите на закладку или на название раздела ниже, и откроется этот раздел.</p>
+      <ol class="tools">
+        <li><a href="#wheel"><b>Пять готовых кексов.</b> Здесь видно, что сделали с базовым рецептом, чтобы кекс стал лимонным, шоколадным с вишней или пряным.</a></li>
+        <li><a href="#layers"><b>Другой вкус — ступень за ступенью.</b> Здесь вы сами меняете кекс, начиная с самого простого.</a></li>
+        <li><a href="#graph"><b>Что с чем сочетается в кексе.</b> Здесь можно подобрать вкусы, которые хороши вместе.</a></li>
+        <li><a href="#build"><b>«Ваш рецепт».</b> Здесь конструктор посчитает рецепт в граммах под вашу форму и нужное число кексов.</a></li>
+        <li><a href="#print"><b>Рецепты для печати.</b> Здесь каждый из шести кексов записан целиком: продукты, приготовление по шагам, выпечка и хранение. Рецепт можно скопировать и распечатать.</a></li>
+      </ol>
+      <p>Под каждым разделом написано, что в нём делать.</p>
+    </div>
+    <nav class="route" aria-label="Ступени сборки кекса">
+      <div class="rgrp" style="grid-column:1/5">в тесте</div><div class="rgrp" style="grid-column:5/7">на готовом кексе</div><div class="rgrp" style="grid-column:7/8">&nbsp;</div>
+      <ol><li><a href="#recipes"><i>•</i><span>Начало: базовый рецепт</span></a></li><li><a href="#l2"><i>1</i><span>Аромат</span></a></li><li><a href="#l3"><i>2</i><span>Тесто</span></a></li><li><a href="#l4"><i>3</i><span>Добавки</span></a></li><li><a href="#l5"><i>4</i><span>Пропитка</span></a></li><li><a href="#l6"><i>5</i><span>Покрытие</span></a></li><li><a href="#l7"><i>•</i><span>Форма</span></a></li></ol>
+    </nav>
+  </header>
+
+  <section class="layer" id="wheel">
+    <div class="head"><h2>Пять готовых кексов</h2></div>
+    <div class="wheelbox">
+      <svg id="donut" viewBox="0 0 320 320" role="group" aria-label="Пять кексов из одного теста"></svg>
+      <div class="wheelside">
+        <p class="what">Нажмите на любой кекс на круге. Справа появится, что сделали с базовым рецептом, чтобы получился именно этот кекс: какой аромат добавили, что поменяли в тесте, что положили внутрь, чем пропитали и чем покрыли.</p>
+        <div class="rcard" id="rlist"></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="layer" id="recipes">
+    <div class="head"><h2>5 версий одной базы</h2></div>
+    <div class="tabs" role="tablist" aria-label="Расчёт">
+      <button type="button" role="tab" id="tabKg" aria-selected="true" data-mode="kg">На 1 кг теста без добавок</button>
+      <div role="tab" id="tabForm" class="tabw" aria-selected="false" data-mode="form" tabindex="0">На <input id="mWeight" type="number" min="100" max="50000" step="50" placeholder="мой вес" aria-label="Вес теста, г"> г теста без добавок</div>
+    </div>
+    <p class="what" id="mainWhat"></p>
+    <div class="scrollhint">Колонка с ингредиентами закреплена — рецепты прокручиваются вбок.</div>
+    <div class="mobpick" id="mPick" role="group" aria-label="Какой кекс показать"></div>
+    <div class="tablebox"><table id="mainT"></table></div>
+  </section>
+
+  <section class="layer" id="evo">
+    <div class="head"><h2 id="evoTitle">Из чего собран кекс</h2></div>
+    <p class="what">Здесь по шагам видно, из чего собран выбранный кекс. Под каждым шагом написано, чем ещё его можно заменить. Нажмите на любое название: появится, что это и сколько его класть.</p>
+    <div class="evo" id="evoBox"></div>
+  </section>
+
+  <div class="head" id="layers" style="scroll-margin-top:16px"><h2>Другой вкус — ступень за ступенью</h2></div>
+  <div class="what stairs">
+    <p>Менять кекс можно постепенно. Внизу — базовый рецепт, как бутон. Каждая ступень добавляет к нему новый ряд лепестков, и кекс раскрывается, как цветок: с каждой ступенью получается новое изделие. Нажмите на лепестки или на их описание, и страница перейдёт к нужной таблице.</p>
+    <div class="ringbox"><svg class="rings lotus" viewBox="0 0 400 330" role="img" aria-label="Кекс раскрывается из базового рецепта, как лотос: ряд лепестков за рядом"><a href="#l6" class="ring petal h h-cherry" data-k="5"><path d="M0,0 C37.2,-37.2 33.5,-93.0 0,-124 C-33.5,-93.0 -37.2,-37.2 0,0 Z" transform="translate(200,270) rotate(-80)"/><path d="M0,0 C37.2,-37.2 33.5,-93.0 0,-124 C-33.5,-93.0 -37.2,-37.2 0,0 Z" transform="translate(200,270) rotate(80)"/><text class="pn" x="304" y="257" text-anchor="middle">5</text></a><a href="#l5" class="ring petal h h-spice" data-k="4"><path d="M0,0 C41.4,-41.4 37.3,-103.5 0,-138 C-37.3,-103.5 -41.4,-41.4 0,0 Z" transform="translate(200,270) rotate(-60)"/><path d="M0,0 C41.4,-41.4 37.3,-103.5 0,-138 C-37.3,-103.5 -41.4,-41.4 0,0 Z" transform="translate(200,270) rotate(60)"/><text class="pn" x="304" y="215" text-anchor="middle">4</text></a><a href="#l4" class="ring petal h h-hazel" data-k="3"><path d="M0,0 C44.4,-44.4 40.0,-111.0 0,-148 C-40.0,-111.0 -44.4,-44.4 0,0 Z" transform="translate(200,270) rotate(-40)"/><path d="M0,0 C44.4,-44.4 40.0,-111.0 0,-148 C-40.0,-111.0 -44.4,-44.4 0,0 Z" transform="translate(200,270) rotate(40)"/><text class="pn" x="284" y="175" text-anchor="middle">3</text></a><a href="#l3" class="ring petal h h-cocoa" data-k="2"><path d="M0,0 C45.0,-45.0 40.5,-112.5 0,-150 C-40.5,-112.5 -45.0,-45.0 0,0 Z" transform="translate(200,270) rotate(-20)"/><path d="M0,0 C45.0,-45.0 40.5,-112.5 0,-150 C-40.5,-112.5 -45.0,-45.0 0,0 Z" transform="translate(200,270) rotate(20)"/><text class="pn" x="245" y="151" text-anchor="middle">2</text></a><a href="#l2" class="ring petal h h-lemon" data-k="1"><path d="M0,0 C45.0,-45.0 40.5,-112.5 0,-150 C-40.5,-112.5 -45.0,-45.0 0,0 Z" transform="translate(200,270) rotate(0)"/><text class="pn" x="200" y="143" text-anchor="middle">1</text></a><a href="#recipes" class="ring core h h-base" data-k="0"><circle cx="200" cy="270" r="40"/><text class="rl c" x="200" y="266" text-anchor="middle">Базовый</text><text class="rl c" x="200" y="282" text-anchor="middle">рецепт</text></a></svg><ol class="ringlist"><li><a href="#recipes" class="h h-base" data-k="0"><i></i><span><b>Начало. Базовый рецепт.</b> Из него собираются все кексы.</span></a></li><li><a href="#l2" class="h h-lemon" data-k="1"><i></i><span><b>Ступень 1. Аромат.</b> Рецепт прежний — добавляете цедру, ваниль, пряности, травы или чай. А кекс уже другой.</span></a></li><li><a href="#l3" class="h h-cocoa" data-k="2"><i></i><span><b>Ступень 2. Тесто.</b> Меняется сам рецепт: тесто становится шоколадным, ореховым или миндальным.</span></a></li><li><a href="#l4" class="h h-hazel" data-k="3"><i></i><span><b>Ступень 3. Добавки.</b> Цукаты, орехи, шоколад внутри — ещё один вкус.</span></a></li><li><a href="#l5" class="h h-spice" data-k="4"><i></i><span><b>Ступень 4. Пропитка.</b> Пропитка для испечённого кекса — ещё один вкус.</span></a></li><li><a href="#l6" class="h h-cherry" data-k="5"><i></i><span><b>Ступень 5. Покрытие.</b> Глазурь или шоколад сверху — другой вкус и вид.</span></a></li></ol></div>
+    <p class="formnote"><b>Форма.</b> Любой из этих кексов можно испечь в форме для кекса любой конфигурации: прямоугольной, кольцом с трубкой (гугельхопф), в маленьких формочках, в формах для мадлен или пластом на противне. <a href="#l7">Таблица форм</a>.</p>
+    <p><b>Как пользоваться.</b> Начните с первой таблицы, с ароматов. Нажмите на строку с ароматом, который вам нравится. В таблицах ниже выделится столбец этого вкуса, и галочка ✓ в нём значит: подходит. В каждой таблице указано, сколько класть на 1 кг теста без добавок. Строка с номерами ступеней ниже переносит к нужной таблице.</p>
+  </div>
+  <nav class="layers" aria-label="Ступени">
+    <a href="#l2"><b>1</b>Аромат</a><a href="#l3"><b>2</b>Тесто</a><a href="#l4"><b>3</b>Добавки</a><a href="#l5"><b>4</b>Пропитка</a><a href="#l6"><b>5</b>Покрытие</a><a href="#l7"><b>•</b>Форма</a><a href="#graph"><b>✦</b>Сочетания</a><a href="#build"><b>→</b>«Ваш рецепт»</a>
+  </nav>
+
+  <section class="layer" id="l2">
+    <div class="head"><span class="num-badge">Ступень 1</span><h2>Аромат</h2></div>
+    <p class="what"><b>Рецепт не меняется — вы только добавляете аромат.</b> Нажмите на строку с ароматом, который вам нравится; если в строке есть варианты, нажмите на нужный. В таблицах ниже выделится столбец этого вкуса.</p>
+    <div class="tablebox"><table id="aromaT" style="min-width:560px"></table></div>
+  </section>
+
+  <section class="layer" id="l3">
+    <div class="head"><span class="num-badge">Ступень 2</span><h2>Тесто</h2></div>
+    <p class="what"><b>Здесь меняется сам рецепт: тесто становится шоколадным, ореховым или миндальным.</b> Нажмите на название столбца или на кнопку над таблицей, чтобы выбрать тесто. Жирные числа на тёмном фоне — то, что отличается от базового теста. Нажмите на число — появится, на сколько и почему.</p>
+    <div class="selbar"><span class="label">Состав</span><div class="chips" id="dsel"></div></div>
+    <div class="tablebox"><table id="doughT"></table></div>
+  </section>
+
+  <section class="layer" id="l4">
+    <div class="head"><span class="num-badge">Ступень 3</span><h2>Добавки</h2></div>
+    <p class="what"><b>В тесто вмешивают цукаты, орехи, шоколад — внутри кекса появляется ещё один вкус.</b> Найдите выделенный столбец вашего вкуса: галочка ✓ — подходит, зелёный кружок ● — это и есть основа вкуса, красный крестик ✕ — мы не знаем, насколько хорошо работает такое сочетание; пробовать можно. Количество дано в граммах на 1 кг теста без добавок. Нажмите на название добавки — появится, как её подготовить. Ниже — готовые пары добавок.</p>
+    <div class="tablebox"><table class="m" id="addT"></table></div>
+    <p class="mobnote">На телефоне показан только столбец вашего вкуса. Вкус выбирают в ступени 1 «Аромат».</p>
+    <h3 class="subh">Готовые пары добавок</h3>
+    <div class="list" id="addPairs"></div>
+  </section>
+
+  <section class="layer" id="l5">
+    <div class="head"><span class="num-badge">Ступень 4</span><h2>Пропитка</h2></div>
+    <p class="what"><b>Испечённый кекс пропитывают, и он получает ещё один вкус. Пропитку выбирают по аромату:</b> её вкус даёт ароматная часть — цедра, чай, мёд, кофе, ликёр. Берите продукт с ярким ароматом — чай с выраженным вкусом, ароматный мёд. Если чай взять без аромата, а мёд заменить инвертным сиропом, пропитка получится просто сладкой. <b>Ликёрная пропитка</b> — сахарный сироп с ликёром: ромом, лимончелло, мараскино, Гран Марнье, кюрасао; сливочную ликёрную пропитку делают на «Бейлисе» или на сгущёнке с коньяком; для каждого ликёра свой рецепт. Многие пропитки готовят на сахарном сиропе 60 °Brix: 600 г сахара и 400 г воды доводят до кипения, чтобы сахар растворился, и остужают. По галочкам в выделенном столбце выберите пропитку (красный крестик ✕ значит, что мы не знаем, насколько хорошо работает такое сочетание). Нажмите на название — появится её состав на кексы из 1 кг теста без добавок. Горячий кекс пропитывают сразу после того, как вынули из формы, до заморозки. Спиртное добавляют в пропитку, остывшую до 25 °С: в горячей спирт испаряется вместе с ароматом. Крепость пропитки — 10–16 % об.</p>
+    <div class="tablebox"><table class="m" id="soakT"></table></div>
+    <p class="mobnote">На телефоне показан только столбец вашего вкуса. Вкус выбирают в ступени 1 «Аромат».</p>
+  </section>
+
+  <section class="layer" id="l6">
+    <div class="head"><span class="num-badge">Ступень 5</span><h2>Покрытие</h2></div>
+    <p class="what"><b>Сверху на кекс наносят покрытие — меняются и вкус, и внешний вид.</b> Покрытия бывают разные: сахарная глазурь, помадка, шоколадная глазурь, абрикосовый гель, сахарная пудра. По галочкам в выделенном столбце выберите покрытие (красный крестик ✕ значит, что мы не знаем, насколько хорошо работает такое сочетание). Нажмите на название — появится рецепт на 100 г покрытия и как им покрывать.</p><p class="what"><b>Когда наносить, зависит от покрытия.</b> Сахарная глазурь — это сахарная пудра с соком, водой или ромом. Её наносят сразу после выпечки и пропитки и закрепляют в духовке: если кекс с сахарной глазурью заморозить, при размораживании на ней оседает влага, сахар растворяется, и глазурь становится липкой. Помадка — не сахарная глазурь, а плотная белая сахарная масса; её подогревают до 37–38 °С и покрывают остывший кекс, а покрытый кекс не замораживают: когда замороженный кекс попадает в тепло, на помадке оседает влага, растворяет сахар, и помадка становится мокрой и липкой. Шоколадную глазурь наносят перед продажей: кекс хранят и замораживают без покрытия, а замороженный кекс покрывают, не размораживая, и потом размораживают при +4 °С. Абрикосовым гелем — прогретым на водяной бане абрикосовым джемом — покрывают остывший кекс.</p>
+    <div class="tablebox"><table class="m" id="coatT"></table></div>
+    <p class="mobnote">На телефоне показан только столбец вашего вкуса. Вкус выбирают в ступени 1 «Аромат».</p>
+  </section>
+
+  <section class="layer" id="l7">
+    <div class="head"><span class="num-badge">•</span><h2>Форма</h2></div>
+    <p class="what"><b>Любой из этих кексов можно испечь в форме для кекса любой конфигурации: прямоугольной, кольцом с трубкой (гугельхопф), в маленьких формочках, в формах для мадлен или пластом на противне, чтобы потом нарезать и собрать слоями.</b> Найдите в таблице форму, похожую на вашу: сколько теста в неё класть и как печь. Для своей формы точное количество посчитает блок ниже.</p>
+    <div class="tablebox"><table id="formT" style="min-width:600px"></table></div>
+    <h3 class="subh" id="fill">Сколько теста в мою форму</h3>
+    <div class="what stairs"><p>Здесь конструктор посчитает, сколько теста положить в вашу форму. Делайте по порядку:</p>
+    <ol><li>Выберите тип формы: прямоугольная, круглая или кольцо с трубкой. Или нажмите на список «Подставить пример» и выберите похожую форму.</li><li>Впишите размеры формы в миллиметрах и сколько форм вы будете заполнять.</li><li>Выберите, что печёте: высокий кекс или пласт.</li></ol>
+    <p>Справа сразу появится, сколько теста положить в одну форму и сколько теста нужно на все формы. Нажмите на число, и увидите, откуда оно взялось.</p></div>
+    <div class="builder fillbox"><div class="pick" id="fillIn"></div><div id="fillOut"></div></div>
+  </section>
+
+  <section class="layer" id="graph">
+    <div class="head"><h2>Что с чем сочетается в кексе</h2></div>
+    <p class="what">Эта карта подскажет, какие вкусы хороши вместе в кексе. Нажмите на вкус, который вам нравится, например на апельсин. Яркими останутся вкусы, которые с ним сочетаются, а ниже появится их список. Из этого списка выберите добавку, пропитку или покрытие для своего кекса. Чтобы начать заново, нажмите на тот же вкус ещё раз.</p>
+    <div class="graphbox"><svg id="fgraph" viewBox="0 0 1000 1000" role="img" aria-label="Карта вкусовых сочетаний кекса"></svg>
+      <div class="graphside"><span class="label" id="gTitle">Выберите вкус</span><div class="alts" id="gList"></div>
+      <div class="glegend" id="gLegend"></div></div></div>
+  </section>
+
+  <section class="layer" id="build">
+    <div class="head"><span class="num-badge">→</span><h2>«Ваш рецепт»: форма и количество</h2></div>
+    <div class="what stairs"><p>Здесь конструктор посчитает рецепт для вас. Делайте по порядку:</p>
+    <ol><li>В списках выберите тесто, аромат, пропитку и покрытие.</li><li>Поставьте галочки у добавок, которые хотите положить.</li><li>Укажите форму: какая она (прямоугольная, круглая или кольцо), её размеры в миллиметрах и сколько кексов вы хотите испечь.</li></ol>
+    <p>Ниже сразу появится рецепт в граммах. Нажмите на любое число, и увидите, откуда оно взялось.</p></div>
+    <div class="builder">
+      <div class="pick" id="calcIn"></div>
+      <div id="calcOut"></div>
+    </div>
+  </section>
+
+
+  <section class="layer" id="print">
+    <div class="head"><span class="num-badge">↓</span><h2>Рецепты для печати</h2></div>
+    <div class="what stairs"><p>Здесь каждый кекс записан целиком: продукты, приготовление по шагам, формы, выпечка и хранение. Делайте так:</p>
+    <ol><li>Нажмите на название кекса — появится его рецепт.</li><li>Если нужно другое количество теста, впишите в окошко, сколько граммов теста без добавок вам нужно. Все граммы пересчитаются сами.</li><li>Нажмите «Скопировать рецепт». Откройте Word или Pages, вставьте рецепт (нажмите одновременно Cmd и V) и распечатайте.</li></ol></div>
+    <div class="pbar">
+      <div class="citv" id="pSel" role="group" aria-label="Какой рецепт показать"></div>
+      <label for="pWeight">На <input id="pWeight" type="number" min="100" max="50000" step="50" placeholder="1000"> г теста без добавок</label>
+      <button type="button" class="pcopy" id="pCopy">Скопировать рецепт</button>
+      <span class="pmsg" id="pMsg" role="status"></span>
+    </div>
+    <article class="pcard" id="pCard"></article>
+  </section>
+
+  <div class="key">
+    <span><i class="b">●</i>основа вкуса</span>
+    <span><i class="y">✓</i>сочетается</span>
+    <span><i class="no">✕</i>мы не знаем, насколько хорошо работает такое сочетание</span>
+  </div>
+  <div class="foot">
+    <span><b>Как читать количества.</b> Количества в таблицах даны на 1 кг теста — то есть на 1 кг смеси сахара, яиц, сливок, муки, масла и остального из рецепта теста. Аромат, добавки и пропитку считают от этого килограмма и кладут сверх него. Например, «цукаты лимона — 250 г» значит: на каждый килограмм теста добавляют 250 г цукатов, и всего получается 1 250 г.</span>
+  </div>
+</div>
+
+<script>
+const TEZ=JSON.parse('{"лимон": ["анис", "апельсин", "белый шоколад", "имбирь", "кокос", "лайм", "миндаль", "мята", "розмарин", "тимьян", "шоколад"], "апельсин": ["абрикос", "анис", "ваниль", "грейпфрут", "грецкий орех", "имбирь", "инжир", "корица", "кофе", "лайм", "лимон", "миндаль", "мята", "розмарин", "тимьян", "шоколад"], "грейпфрут": ["апельсин", "корица"], "лайм": ["апельсин", "имбирь", "кокос", "корица", "лимон", "мята", "шоколад"], "имбирь": ["абрикос", "апельсин", "ваниль", "кардамон", "корица", "кофе", "лайм", "лимон", "миндаль", "мята", "шоколад"], "груша": ["анис", "грецкий орех", "кардамон", "корица", "миндаль", "фундук", "шоколад"], "инжир": ["анис", "апельсин", "ваниль", "грецкий орех", "корица", "малина", "миндаль", "мята", "фундук", "шоколад"], "абрикос": ["апельсин", "ваниль", "имбирь", "кардамон", "корица", "малина", "миндаль", "розмарин", "шоколад"], "вишня": ["ваниль", "грецкий орех", "кокос", "корица", "кофе", "миндаль", "фундук", "шоколад"], "малина": ["абрикос", "белый шоколад", "ваниль", "инжир", "кокос", "миндаль", "мята", "фундук", "шоколад"], "миндаль": ["абрикос", "анис", "апельсин", "белый шоколад", "вишня", "груша", "имбирь", "инжир", "кардамон", "кокос", "корица", "кофе", "лимон", "малина", "розмарин", "фундук", "шоколад"], "фундук": ["ваниль", "вишня", "груша", "инжир", "кофе", "малина", "миндаль", "розмарин", "шоколад"], "грецкий орех": ["анис", "апельсин", "ваниль", "вишня", "груша", "инжир", "корица", "кофе", "шоколад"], "кокос": ["анис", "белый шоколад", "ваниль", "вишня", "кардамон", "корица", "лайм", "лимон", "малина", "миндаль", "шоколад"], "шоколад": ["абрикос", "анис", "апельсин", "ваниль", "вишня", "грецкий орех", "груша", "имбирь", "инжир", "кардамон", "кокос", "корица", "кофе", "лайм", "лимон", "малина", "миндаль", "мята", "розмарин", "тимьян", "фундук"], "белый шоколад": ["кардамон", "кокос", "кофе", "лимон", "малина", "миндаль"], "кофе": ["апельсин", "белый шоколад", "ваниль", "вишня", "грецкий орех", "имбирь", "кардамон", "корица", "миндаль", "фундук", "шоколад"], "мята": ["анис", "апельсин", "имбирь", "инжир", "корица", "лайм", "лимон", "малина", "шоколад"], "корица": ["абрикос", "анис", "апельсин", "вишня", "грейпфрут", "грецкий орех", "груша", "имбирь", "инжир", "кардамон", "кокос", "кофе", "лайм", "миндаль", "мята", "тимьян", "шоколад"], "кардамон": ["абрикос", "белый шоколад", "ваниль", "груша", "имбирь", "кокос", "корица", "кофе", "миндаль", "шоколад"], "анис": ["апельсин", "ваниль", "грецкий орех", "груша", "инжир", "кокос", "корица", "лимон", "миндаль", "мята", "шоколад"], "ваниль": ["абрикос", "анис", "апельсин", "вишня", "грецкий орех", "имбирь", "инжир", "кардамон", "кокос", "кофе", "малина", "фундук", "шоколад"], "розмарин": ["абрикос", "апельсин", "лимон", "миндаль", "фундук", "шоколад"], "тимьян": ["апельсин", "корица", "лимон", "шоколад"]}');
+/* ---------- данные ---------- */
+const BATCH=4572;
+const ING=[
+ ["sugar","Сахар белый",""],
+ ["invert","Инвертный сахар","В базовом тесте инвертного сахара нет. Его добавляют 2–3 % от массы теста, чтобы кекс медленнее высыхал. В тесто с какао и шоколадом он нужен обязательно."],
+ ["egg","Яйцо","Яйца должны быть температурой 20–30 °С, их вводят постепенно. Часть яиц можно заменить молоком или сливками, но тогда кекс поднимется немного меньше."],
+ ["cream","Сливки ≥ 33 %","Сливками 35 % можно заменить и часть жира. Тогда масса становится мягче, а кекс поднимается меньше."],
+ ["salt","Соль",""],
+ ["flour","Мука Т55","Мука слабая. Её просеивают вместе с разрыхлителем и после того, как ввели в тесто, долго не перемешивают. От 15 до 50 % муки можно заменить картофельным крахмалом — мякиш получится тоньше."],
+ ["almond","Миндальная мука","Миндальная мука забирает влагу, поэтому вместо неё из теста убирают часть пшеничной муки: на 300 г миндальной муки — 150 г пшеничной. Миндальной муки должно быть не больше, чем сахара. Её вводят вместе с яйцами."],
+ ["cocoa","Какао-порошок","Какао забирает воды больше, чем мука. Его просеивают вместе с мукой и вводят в конце. Какао кладут 10 % от массы муки. Для яркого шоколадного цвета и вкуса сухих веществ какао нужно не меньше 4 % от массы теста."],
+ ["liquid","Сливки к какао","Какао забирает много воды, поэтому вместе с ним в тесто добавляют жидкость: 75–100 % от массы какао. Здесь это сливки, как в мраморном кексе; вместо них можно взять молоко, воду или сок, но не яйца."],
+ ["bp","Разрыхлитель","Разрыхлитель просеивают вместе с мукой."],
+ ["butter","Масло сливочное 82,5 %","Сливочное масло растапливают и вливают в тесто тонкой струйкой."],
+ ["noisette","Нуазет 99,9 %","Нуазет — сливочное масло, которое прогрели до орехового цвета и запаха. Вместо каждых 100 г сливочного масла, которые убирают из теста, кладут 85 г нуазета."],
+ ["paste","Фундучная паста","Сливочное масло взбивают вместе с фундучной пастой."]
+];
+const BASE={sugar:1350,invert:0,egg:1095,cream:600,salt:7.5,flour:1080,almond:0,cocoa:0,liquid:0,bp:19.5,butter:420,noisette:0,paste:0};
+const COMP=[
+ {id:"base",name:"Без изменений",sub:"базовое",flav:null,hue:"h-base",ch:{}},
+ {id:"noisette",name:"Нуазет",sub:"нуазет вместо части сливочного масла",flav:null,hue:"h-noisette",ch:{butter:280,noisette:119,egg:1161},
+  tips:{butter:"Вместо трети сливочного масла кладут нуазет: вместо 300 г сливочного масла кладут 200 г сливочного масла и 85 г нуазета.",egg:"Яиц кладут на 6 % больше, чем в базовом тесте.",noisette:"Вместо каждых 100 г сливочного масла, которые убирают из теста, кладут 85 г нуазета."}},
+ {id:"paste",name:"Фундучная паста",sub:"фундучная паста вместо части сливочного масла",flav:"фундук",hue:"h-pist",ch:{butter:280,paste:210},
+  tips:{butter:"Вместо 300 г сливочного масла кладут 200 г сливочного масла и 150 г фундучной пасты.",paste:"На каждые 300 г сливочного масла в рецепте кладут 150 г фундучной пасты."}},
+ {id:"nutflour",name:"Миндальная мука",sub:"миндальная мука вместо части пшеничной",flav:"миндаль",hue:"h-almond",ch:{flour:930,almond:300},
+  tips:{flour:"Пшеничной муки кладут на 150 г меньше на каждые 300 г миндальной — в соотношении 1 : 2.",almond:"Миндальной муки здесь меньше, чем сахара, как и должно быть."}},
+ {id:"cocoa",name:"Какао",sub:"какао вместо части муки",flav:"шоколад",hue:"h-cocoa",ch:{flour:918,cocoa:108,liquid:94.5,invert:114},
+  tips:{flour:"Какао кладут 10 % от массы муки, а муки убирают в полтора раза больше: на каждые 100 г какао — 150 г муки.",cocoa:"Какао кладут 10 % от массы муки, а муки убирают в полтора раза больше: на каждые 100 г какао — 150 г муки.",liquid:"Сливок к какао кладут 75–100 % от массы какао; здесь середина — 87,5 %. Вместо сливок можно взять молоко, воду или сок.",invert:"В тесто с какао инвертный сахар нужен обязательно: 2–3 % от массы теста. Здесь середина — 2,5 %."}}
+];
+const AROMA=[
+ {n:"Без аромата",k:null,items:[],t:"Базовое тесто без добавок."},
+ {n:"Цедра лимона",k:"лимон",items:[["Цедра лимона",6.6]],t:"Цедру растирают с сахаром, пока ещё не ввели яйца. Можно класть от 3,5 до 8,2 г на 1 кг теста без добавок."},
+ {n:"Цедра апельсина",k:"апельсин",items:[["Цедра апельсина",6.6]],t:"Цедру растирают с сахаром, пока ещё не ввели яйца."},
+ {n:"Цедра лайма",k:"лайм",items:[["Цедра лайма",6.6]],t:"Цедру растирают с сахаром, пока ещё не ввели яйца."},
+ {n:"Ваниль молотая",k:"ваниль",items:[["Ваниль молотая",1.8]],t:"Ваниль растирают с сахаром."},
+ {n:"Мята свежая",k:"мята",items:[["Мята свежая, листья",11.3]],t:"Листья мелко рубят, растирают с сахаром и цедрой и оставляют минимум на 15 минут, потом вводят яйца."},
+ {n:"Пряности",k:"корица",items:[["Корица молотая",1.1],["Гвоздика молотая",0.7],["Мускатный орех",0.45]],t:"Корица, гвоздика и мускатный орех. Это самый мягкий вариант пряностей."},
+ {n:"Чай Эрл Грей",k:"эрл грей",items:[["Чай Эрл Грей",20]],t:"Чай мелко смалывают вместе с сахаром из рецепта. Если вместо Эрл Грея взять матчу, молоть её не нужно."},
+ {n:"Базилик свежий",k:"базилик",items:[["Базилик свежий, листья",7.7]],t:"Листья смалывают с сахаром и цедрой в комбайне, потом вводят яйца."},
+ {n:"Розмарин и серполет",k:"розмарин",items:[["Розмарин свежий, рубленый",6.4],["Серполет (тимьян ползучий), рубленый",6.4]],t:"Травы мелко рубят и вмешивают в тесто сразу после масла, растопленного до 45 °С."},
+ {n:"Сухие духи",k:"корица",items:[["Корица", 5.0], ["Гвоздика", 1.5], ["Перец душистый", 1.5], ["Мускатный орех", 1.5], ["Бадьян", 1.0], ["Имбирь", 1.0], ["Перец чёрный", 0.5], ["Кардамон", 0.5]],t:"Советская пряная смесь: корица 40 %, гвоздика, душистый перец и мускатный орех по 12 %, бадьян и имбирь по 8 %, чёрный перец и кардамон по 4 %. Сколько класть в кекс: 12,5 г смеси на 1 кг теста без добавок. В кексах пряную смесь кладут от 8 до 15 г на 1 кг: меньше — когда пряности только сопровождают мёд и цитрус, больше — когда кекс должен быть пряным, как пряник. Смесь просеивают вместе с мукой."},
+ {n:"Спекулас",k:"корица",items:[["Корица", 5.89], ["Перец душистый", 2.94], ["Мускатный орех", 2.94], ["Гвоздика", 0.74]],t:"Смесь для спекуласа: корица 47 %, душистый перец и мускатный орех по 23,5 %, гвоздика 6 %. Сколько класть в кекс: 12,5 г смеси на 1 кг теста без добавок. В кексах пряную смесь кладут от 8 до 15 г на 1 кг: меньше — когда пряности только сопровождают мёд и цитрус, больше — когда кекс должен быть пряным, как пряник. Смесь просеивают вместе с мукой."},
+ {n:"Пряник (лебкухен)",k:"корица",items:[["Корица", 6.25], ["Бадьян", 3.12], ["Мускатный орех", 1.56], ["Гвоздика", 1.56]],t:"Смесь для пряника: корица 50 %, бадьян 25 %, мускатный орех и гвоздика по 12,5 %. Сколько класть в кекс: 12,5 г смеси на 1 кг теста без добавок. В кексах пряную смесь кладут от 8 до 15 г на 1 кг: меньше — когда пряности только сопровождают мёд и цитрус, больше — когда кекс должен быть пряным, как пряник. Смесь просеивают вместе с мукой."}
+];
+const FLAVS=[
+ {k:"лимон",n:"Лимон",hue:"h-lemon"},{k:"апельсин",n:"Апельсин",hue:"h-orange"},{k:"ваниль",n:"Ваниль",hue:"h-vanilla"},
+ {k:"мята",n:"Мята",hue:"h-mint"},{k:"корица",n:"Пряности",hue:"h-spice"},{k:"эрл грей",n:"Эрл Грей",hue:"h-tea"},
+ {k:"шоколад",n:"Тёмный шоколад и какао",hue:"h-cocoa"},{k:"миндаль",n:"Миндаль",hue:"h-almond"},{k:"фундук",n:"Фундук",hue:"h-hazel"}
+];
+const FP=[["кардамон", "миндаль"], ["груша", "кардамон"], ["кардамон", "лимон"], ["грейпфрут", "лимон"], ["груша", "яблоко"], ["апельсин", "яблоко"], ["апельсин", "кардамон"], ["апельсин", "грейпфрут"], ["апельсин", "лимон"], ["ваниль", "кофе"], ["кардамон", "лайм"], ["груша", "кофе"], ["грецкий орех", "кофе"], ["кофе", "лайм"], ["кофе", "молочный шоколад"], ["кофе", "фундук"], ["белый шоколад", "кофе"], ["кофе", "шоколад"], ["фундук", "шоколад"], ["абрикос", "вишня"], ["имбирь", "кардамон"], ["грейпфрут", "имбирь"], ["кардамон", "мята"], ["кофе", "миндаль"], ["изюм", "инжир"], ["изюм", "фундук"], ["вишня", "изюм"], ["грейпфрут", "кардамон"], ["грейпфрут", "лайм"], ["вишня", "грейпфрут"], ["миндаль", "фундук"], ["мята", "фундук"], ["вишня", "мята"], ["апельсин", "вишня"], ["апельсин", "фундук"], ["груша", "фундук"], ["карамель", "фундук"], ["кокос", "фундук"], ["инжир", "фундук"], ["фисташки", "фундук"], ["вишня", "груша"], ["кофе", "фисташки"], ["груша", "изюм"], ["малина", "яблоко"], ["карамель", "кофе"], ["анис", "кардамон"], ["вишня", "инжир"], ["грейпфрут", "миндаль"], ["анис", "грейпфрут"]]; // Foodpairing, совпадение 3 из 3 (данные проекта P009)
+const CK=[["ваниль","лимон"],["апельсин","ваниль"],["ваниль","изюм"],["корица","мускатный орех"],["ваниль","ром"],["корица","тёмный сахар"],["апельсин","ром"],["гвоздика","корица"],["изюм","ром"],["мускатный орех","тёмный сахар"],["абрикос","ваниль"],["ваниль","шоколад"],["абрикос","апельсин"],["апельсин","фундук"],["ваниль","вишня"],["ваниль","миндаль"],["гвоздика","мускатный орех"],["миндаль","ром"],["абрикос","лимон"],["апельсин","лимон"],["апельсин","молочный шоколад"],["апельсин","шоколад"],["вишня","изюм"],["вишня","ром"],["гвоздика","тёмный сахар"],["грецкий орех","мускатный орех"],["изюм","корица"],["изюм","миндаль"],["молочный шоколад","шоколад"],["лимон","миндаль"],["молочный шоколад","ром"],["молочный шоколад","фундук"],["ром","фундук"],["апельсин","вишня"],["апельсин","изюм"],["апельсин","корица"],["апельсин","миндаль"],["апельсин","мед"],["апельсин","фисташки"],["бадьян","гвоздика"],["бадьян","корица"],["ваниль","коньяк"],["ваниль","мед"],["ваниль","фисташки"],["ваниль","фундук"],["гвоздика","мед"],["грецкий орех","корица"],["изюм","коньяк"],["изюм","лимон"],["изюм","мускатный орех"],["имбирь","корица"],["имбирь","тёмный сахар"],["миндаль","шоколад"],["ром","шоколад"],["фундук","шоколад"],["коньяк","ром"],["корица","мед"],["корица","ром"],["лимон","ром"],["мускатный орех","пекан"],["абрикос","вишня"],["абрикос","шоколад"],["абрикос","корица"],["абрикос","ром"],["абрикос","фисташки"],["апельсин","грецкий орех"],["апельсин","морковь"],["бадьян","мускатный орех"],["бадьян","мед"],["бадьян","тёмный сахар"],["банан","грецкий орех"],["банан","мускатный орех"],["банан","тёмный сахар"],["ваниль","грецкий орех"],["ваниль","имбирь"],["ваниль","корица"],["ваниль","молочный шоколад"],["ваниль","херес"],["вишня","коньяк"],["вишня","корица"],["вишня","лимон"],["вишня","фисташки"],["вишня","херес"],["гвоздика","изюм"],["гвоздика","ром"],["грецкий орех","изюм"],["грецкий орех","морковь"],["грецкий орех","пекан"],["грецкий орех","тёмный сахар"],["грецкий орех","финики"],["груша","имбирь"],["изюм","херес"],["имбирь","мускатный орех"],["имбирь","мед"],["кирш","шоколад"],["корица","шоколад"],["лимон","шоколад"],["кирш","молочный шоколад"],["коньяк","херес"],["корица","лимон"],["корица","миндаль"],["корица","морковь"],["корица","пекан"],["корица","яблоко"],["лимон","малина"],["лимон","мед"],["лимон","фисташки"],["миндаль","молочный шоколад"],["миндаль","фундук"],["молочный шоколад","тёмный сахар"],["морковь","мускатный орех"],["мед","мускатный орех"],["мускатный орех","яблоко"],["ром","херес"],["тёмный сахар","шоколад"],["тёмный сахар","яблоко"],["абрикос","белый шоколад"],["абрикос","изюм"],["абрикос","миндаль"],["ананас","апельсин"],["ананас","ваниль"],["ананас","изюм"],["ананас","лимон"],["ананас","ром"],["анис","апельсин"],["анис","гвоздика"],["анис","корица"],["анис","мед"],["апельсин","белый шоколад"],["апельсин","гвоздика"],["апельсин","кофе"],["апельсин","малина"],["апельсин","мускатный орех"],["банан","шоколад"],["банан","корица"],["банан","миндаль"],["банан","пекан"],["банан","ром"],["белый шоколад","ваниль"],["белый шоколад","лимон"],["белый шоколад","малина"],["ваниль","гвоздика"],["ваниль","груша"],["ваниль","карамель"],["ваниль","каштан"],["ваниль","малина"],["ваниль","мускатный орех"],["ваниль","пекан"],["вишня","гвоздика"],["вишня","грецкий орех"],["вишня","миндаль"],["гвоздика","грецкий орех"],["гвоздика","имбирь"],["гвоздика","шоколад"],["гвоздика","кардамон"],["гвоздика","пекан"],["гвоздика","финики"],["гвоздика","херес"],["грецкий орех","имбирь"],["грецкий орех","коньяк"],["грецкий орех","херес"],["груша","мед"],["душистый перец","имбирь"],["душистый перец","корица"],["душистый перец","мускатный орех"],["душистый перец","тыква"],["изюм","имбирь"],["изюм","мед"],["имбирь","карамель"],["имбирь","патока"],["имбирь","тыква"],["кабачок","корица"],["кабачок","пекан"],["кардамон","шоколад"],["кардамон","корица"],["каштан","кофе"],["каштан","молочный шоколад"],["каштан","мед"],["каштан","ром"],["каштан","фундук"],["кокос","корица"],["кокос","морковь"],["кокос","пекан"],["коньяк","финики"],["корица","тыква"],["корица","финики"],["корица","фундук"],["корица","херес"],["кофе","миндаль"],["кофе","молочный шоколад"],["кофе","мед"],["кофе","ром"],["кофе","фундук"],["лимон","мак"],["лимон","мускатный орех"],["лимон","эрл грей"],["мед","миндаль"],["морковь","пекан"],["мускатный орех","тыква"],["мускатный орех","финики"],["мускатный орех","фундук"],["пекан","ром"],["пекан","финики"],["ром","фисташки"],["кофе","шоколад"],["мед","ром"],["белый шоколад","миндаль"],["мед","шоколад"],["ваниль","кофе"],["карамель","корица"],["миндаль","фисташки"],["мед","фундук"],["банан","ваниль"],["белый шоколад","мед"],["ваниль","сливочный сыр"],["ваниль","яблоко"],["грецкий орех","яблоко"],["груша","корица"],["корица","патока"],["фисташки","шоколад"],["ваниль","грейпфрут"],["виски","корица"],["грецкий орех","кофе"],["карамель","миндаль"],["клубника","лимон"],["кокос","шоколад"],["малина","шоколад"],["ананас","кокос"],["ананас","лайм"],["белый шоколад","грейпфрут"],["белый шоколад","нуазет"],["белый шоколад","пекан"],["белый шоколад","ром"],["ваниль","клубника"],["вишня","мед"],["гвоздика","патока"],["груша","мускатный орех"],["имбирь","кардамон"],["кардамон","морковь"],["кардамон","пекан"],["кленовый сироп","кофе"],["кокос","лайм"],["корица","чёрный перец"],["нуазет","пекан"],["лимон","мандарин"],["мед","фисташки"],["ананас","банан"],["ананас","корица"],["ананас","маракуйя"],["апельсин","мак"],["банан","кокос"],["белый шоколад","карамель"],["белый шоколад","маракуйя"],["белый шоколад","розмарин"],["белый шоколад","фисташки"],["белый шоколад","фундук"],["ваниль","виски"],["ваниль","кардамон"],["ваниль","кленовый сироп"],["ваниль","клюква"],["ваниль","кокос"],["ваниль","нуазет"],["ваниль","лайм"],["ваниль","маракуйя"],["ваниль","рикотта"],["ваниль","черника"],["виски","карамель"],["виски","кофе"],["виски","яблоко"],["гвоздика","тыква"],["грейпфрут","миндаль"],["грейпфрут","мед"],["грецкий орех","кленовый сироп"],["грецкий орех","шоколад"],["груша","карамель"],["груша","кардамон"],["груша","фундук"],["ежевика","рикотта"],["ежевика","черника"],["изюм","морковь"],["кабачок","мак"],["карамель","мед"],["карамель","фундук"],["карамель","яблоко"],["кардамон","клубника"],["кардамон","лимон"],["кардамон","мак"],["кардамон","мускатный орех"],["кардамон","тыква"],["кардамон","чёрный перец"],["кардамон","яблоко"],["каштан","кунжут"],["каштан","миндаль"],["клубника","мак"],["клубника","миндаль"],["кокос","маракуйя"],["кокос","миндаль"],["кориандр","мед"],["корица","кофе"],["корица","мак"],["корица","сливочный сыр"],["миндаль","нуазет"],["мускатный орех","нуазет"],["кунжут","ром"],["лайм","лимон"],["лайм","маракуйя"],["лимон","морковь"],["лимон","пекан"],["лимон","рикотта"],["лимон","розмарин"],["лимон","сливочный сыр"],["лимон","финики"],["лимон","черника"],["лимон","яблоко"],["мак","шоколад"],["маракуйя","шоколад"],["миндаль","персик"],["миндаль","эрл грей"],["миндаль","яблоко"],["мед","молочный шоколад"],["морковь","сливочный сыр"],["морковь","яблоко"],["мед","эрл грей"],["патока","сливочный сыр"],["пекан","яблоко"],["рикотта","черника"],["тыква","шоколад"],["фисташки","фундук"],["апельсин","сливочный сыр"]]; // пары из традиционных кексов: вместе хотя бы в двух кексах (D015a, D015b)
+const FPX=[["ананас","яблоко"],["апельсин","базилик"],["апельсин","грейпфрут"],["апельсин","кардамон"],["апельсин","клюква"],["апельсин","яблоко"],["бадьян","базилик"],["бадьян","кардамон"],["бадьян","кориандр"],["бадьян","розмарин"],["бадьян","тимьян"],["базилик","гвоздика"],["базилик","грейпфрут"],["базилик","душистый перец"],["базилик","имбирь"],["базилик","кориандр"],["базилик","лайм"],["базилик","лимон"],["базилик","мандарин"],["базилик","миндаль"],["базилик","мускатный орех"],["базилик","мята"],["базилик","розмарин"],["базилик","тимьян"],["базилик","финики"],["банан","клубника"],["банан","яблоко"],["белый шоколад","кофе"],["вишня","клюква"],["гвоздика","кориандр"],["гвоздика","розмарин"],["гвоздика","тимьян"],["грейпфрут","имбирь"],["грейпфрут","кардамон"],["грейпфрут","клюква"],["грейпфрут","лайм"],["грейпфрут","лимон"],["грейпфрут","мандарин"],["душистый перец","кардамон"],["душистый перец","кориандр"],["душистый перец","розмарин"],["душистый перец","тимьян"],["ежевика","малина"],["ежевика","яблоко"],["изюм","инжир"],["имбирь","тимьян"],["кардамон","клюква"],["кардамон","кориандр"],["кардамон","лайм"],["кардамон","мандарин"],["кардамон","миндаль"],["кардамон","мята"],["кардамон","розмарин"],["кардамон","тимьян"],["клубника","кофе"],["клубника","малина"],["клубника","мед"],["клубника","сливки"],["клубника","сливочный сыр"],["кориандр","лайм"],["кориандр","лимон"],["кориандр","миндаль"],["кориандр","мускатный орех"],["кориандр","мята"],["кориандр","розмарин"],["кориандр","тимьян"],["кофе","сливочный сыр"],["кофе","тёмный сахар"],["кофе","черника"],["лайм","мускатный орех"],["лайм","розмарин"],["лайм","тимьян"],["лимон","тимьян"],["малина","яблоко"],["мандарин","мускатный орех"],["мандарин","тимьян"],["маракуйя","яблоко"],["миндаль","мускатный орех"],["миндаль","розмарин"],["миндаль","тимьян"],["мускатный орех","мята"],["мускатный орех","тимьян"],["мята","розмарин"],["мята","тимьян"],["патока","яблоко"],["розмарин","тимьян"]]; // Foodpairing, уровень 3, вкусы карты (P009)
+const DC=[["карамель","фундук"],["шоколад","абрикос"],["фисташки","малина"],["шоколад","апельсин"],["шоколад","фундук"],["шоколад","молочный шоколад"],["шоколад","абрикос"],["шоколад","шоколад"],["миндаль","изюм"],["миндаль","апельсин"],["миндаль","малина"],["лимон","малина"],["лимон","изюм"],["лимон","вишня"],["лимон","абрикос"],["лимон","фисташки"],["лимон","апельсин"],["эрл грей","абрикос"],["эрл грей","фисташки"],["эрл грей","лимон"],["фундук","молочный шоколад"],["фундук","шоколад"],["шоколад","кофе"],["шоколад","ром"],["шоколад","кирш"],["лимон","ром"],["лимон","ваниль"],["апельсин","шоколад"],["ваниль","изюм"],["ваниль","вишня"],["ваниль","абрикос"],["ваниль","фисташки"],["корица","кофе"],["кофе","лимон"],["кофе","карамель"],["кофе","миндаль"],["кофе","фундук"],["кофе","грецкий орех"]]; // кофе: пары со слов Ольги 02.10.2026
+const PREP="Цукаты вымачивают в роме или ликёре (или берут мягкие), с вечера обсушивают, обваливают в муке и вводят в тесто последними. Тесто с цукатами выдерживают 4–12 часов при +4 °С.";
+const ADDS=[
+ {n:"Цукаты лимона",k:"лимон",q:"200–300 г",t:PREP},{n:"Цукаты апельсина",k:"апельсин",q:"200–300 г",t:PREP},
+ {n:"Цукаты грейпфрута",k:"грейпфрут",q:"200–300 г",t:PREP},
+ {n:"Цукаты имбиря",k:"имбирь",q:"100 г",t:"Если в кексе есть другие добавки, имбиря кладут меньше, чтобы он их не перебил."},
+ {n:"Цукаты груши",k:"груша",q:"150 г",t:""},{n:"Сушёный инжир",k:"инжир",q:"100 г",t:"Инжир размягчают на пару."},
+ {n:"Курага",k:"абрикос",q:"около 120 г",t:"Курагу нарезают кубиками."},{n:"Цукаты вишни",k:"вишня",q:"до 80 г",t:"Вишню режут на четвертинки."},
+ {n:"Изюм",k:"изюм",q:"",t:"Изюм замачивают в роме не меньше чем на 2 дня: на 400 г изюма — 100 г рома крепостью 50°."},
+ {n:"Миндаль",k:"миндаль",q:"100–200 г",t:"Рубленых орехов кладут 10–20 % от массы теста."},{n:"Фундук",k:"фундук",q:"100–200 г",t:"Фундук обжаривают и рубят."},
+ {n:"Грецкий орех",k:"грецкий орех",q:"100–200 г",t:""},{n:"Фисташки",k:"фисташки",q:"около 50 г",t:"Фисташки измельчают."},
+ {n:"Тёмный шоколад",k:"шоколад",q:"200 г",t:"Шоколад вводят в конце. Он делает кекс суше, поэтому можно добавить 5 % инвертного сахара. Для кекса берут шоколад 55–60 %, не кислый и не горький."},
+ {n:"Молочный шоколад",k:"молочный шоколад",q:"100–200 г",t:"Шоколад вводят в конце."},{n:"Белый шоколад",k:"белый шоколад",q:"",t:""}
+];
+const ADDPAIRS=[["Инжир + молочный шоколад","по 100 г на 1 кг"],["Цукаты имбиря + тёмный шоколад 55–60 %","по 100 г на 1 кг"],["Цукаты имбиря + цукаты груши","100 + 150 г на 1 кг"],["Фундук + молочный шоколад + цукаты апельсина","60 + 140 + 140 г на 1 кг"],["Изюм + лимонные цукаты + вишня + курага + фисташки","вместе в одном кексе"],["Миндальная мука + изюм","по 400 г на 1 кг"],["Цукаты апельсина + шоколадные капли","по 400 г на 1 кг"]];
+const SOAKREC={
+ vanilla:{per:500,items:[["Вода", 310.2], ["Сахар", 155.1], ["Корица палочкой", 3.7], ["Цедра апельсина", 6.2], ["Ванильный ликёр 60°", 24.8]],why:"Воду с сахаром, корицей и цедрой апельсина довести до кипения. Остудить до 25 °С и добавить ванильный ликёр. Хранить в холодильнике при +4 °С."},
+ lemon:{per:500,items:[["Вода", 118.1], ["Цедра лимона", 27.6], ["Сок лимона", 78.7], ["Сахарный сироп 60 °Brix (Брикс)", 275.6]],why:"Воду довести до кипения, снять с огня, положить цедру и оставить настаиваться на 20 минут. Процедить (можно не процеживать), добавить сок и сахарный сироп. Остудить и хранить в холодильнике. Сахарный сироп 60 °Brix: 600 г сахара и 400 г воды довести до кипения, чтобы сахар растворился, и остудить.",lead:"Аромат этой пропитке даёт цедра."},
+ caramelplain:{per:500,items:[["Сахар", 170], ["Кипяток", 330]],why:"Весь сахар растопить в сотейнике без воды до карамели, не пережигая: пережжённая карамель даст горький вкус. Влить кипяток — осторожно, карамель сильно кипит и брызгает, — и прогреть, пока карамель полностью не растворится. Остудить и хранить в холодильнике."},
+ orange:{per:500,items:[["Сок апельсина", 293.4], ["Сахарный сироп 60 °Brix (Брикс)", 176.1], ["Стручок ванили", 1.2], ["Вода", 29.3]],why:"Всё соединить холодным и хранить в холодильнике. Сок отжимают в центрифужной соковыжималке, иначе пропитка получится слишком густой. Сахарный сироп 60 °Brix: 600 г сахара и 400 г воды довести до кипения, чтобы сахар растворился, и остудить."},
+ tea:{per:500,items:[["Крепкий чай", 192.3], ["Сахарный сироп 60 °Brix (Брикс)", 307.7]],why:"Крепко заварить чай, смешать с сахарным сиропом, остудить и хранить в холодильнике. Сахарный сироп 60 °Brix: 600 г сахара и 400 г воды довести до кипения, чтобы сахар растворился, и остудить.",lead:"Вкус этой пропитки даёт чай, поэтому берите чай с ярким ароматом, например Эрл Грей. Если у чая нет своего аромата, пропитка получится просто сладкой."},
+ coffee:{per:500,items:[["Вода", 311.3], ["Сахар", 155.7], ["Кофе растворимый", 5], ["Цедра апельсина", 3.1], ["Ромовый ликёр 50°", 24.9]],why:"Воду с сахаром, кофе и цедрой довести до кипения. Остудить до 25 °С и добавить ликёр. Хранить в холодильнике при +4 °С."},
+ honey:{per:500,items:[["Вода", 284.9], ["Стручок ванили", 1.4], ["Мёд", 213.7]],why:"Воду со стручком ванили довести до кипения и оставить настаиваться на 20 минут. Процедить (можно не процеживать), добавить мёд. Остудить и хранить в холодильнике.",lead:"Аромат этой пропитки даёт мёд, поэтому мёд нужен ароматный. Если заменить его инвертным сиропом, получится просто сладкая пропитка без вкуса мёда."},
+ caramel:{per:500,items:[["Сахар", 166.7], ["Корица палочками", 9.8], ["Кипяток", 323.5]],why:"Весь сахар растопить в сотейнике без воды до карамели, не пережигая: пережжённая карамель даст горький вкус. Влить кипяток — осторожно, карамель сильно кипит и брызгает, — положить корицу и прогреть, пока карамель полностью не растворится. Остудить и хранить в холодильнике."},
+ mint:{per:500,items:[["Мята свежая", 14.5], ["Сахар", 193.4], ["Стручок ванили", 1.9], ["Вода", 290.1]],why:"Мяту мелко порубить с сахаром, добавить воду и ваниль, довести до кипения и оставить настаиваться на 20 минут. Процедить (можно не процеживать). Остудить и хранить в холодильнике. Для более сильного аромата в холодную пропитку добавляют несколько капель эфирного масла мяты.",lead:"Аромат этой пропитке даёт свежая мята."},
+ rum:{per:500,items:[["Вода", 299.0], ["Сахар", 104.7], ["Мёд акациевый", 23.9], ["Корица палочкой", 4.5], ["Цедра апельсина", 6.0], ["Цедра лимона", 1.5], ["Стручок ванили", 0.6], ["Ром 70°", 59.8]],why:"Воду с сахаром, мёдом, корицей, цедрой и ванилью довести до кипения и остудить до 25 °С: в горячей пропитке спирт испаряется вместе с ароматом. Добавить ром. Хранить в холодильнике в плотно закрытой посуде. Крепость пропитки — 9°."},
+ limoncello:{per:500,items:[["Вода", 254.5], ["Сахар", 92.9], ["Глюкозный сироп 38–42 DE (ДЕ)", 36.9], ["Цедра лимона", 7.6], ["Лимончелло 32°", 108.1]],why:"Воду, сахар, глюкозный сироп и цедру довести до кипения и остудить до 25 °С: в горячей пропитке спирт испаряется вместе с ароматом. Добавить лимончелло. Хранить в холодильнике. Крепость пропитки — 8°."},
+ cherry:{per:500,items:[["Вода", 234.7], ["Сахар", 117.4], ["Глюкозный сироп 38–42 DE (ДЕ)", 58.7], ["Мараскино 70°", 89.2]],why:"Воду с сахаром и глюкозным сиропом довести до кипения и остудить до 25 °С: в горячей пропитке спирт испаряется вместе с ароматом. Добавить мараскино — вишнёвый ликёр. Хранить в холодильнике. Крепость пропитки — 14°."},
+ gm:{per:500,items:[["Вода", 242.1], ["Сахар", 142.1], ["Гран Марнье 40°", 115.8]],why:"Воду с сахаром довести до кипения и остудить до 25 °С: в горячей пропитке спирт испаряется вместе с ароматом. Добавить Гран Марнье. Хранить в холодильнике. Крепость пропитки — 10°."},
+ baileys:{per:500,items:[["«Бейлис» 17°",259.4],["Сахар",76.5],["Вода",164.1]],why:"Воду с сахаром довести до кипения и остудить до 25 °С: в горячей пропитке спирт испаряется вместе с ароматом. Добавить «Бейлис». Хранить в холодильнике. Крепость пропитки — около 10°, сахара — 28 % вместе с сахаром самого ликёра."},
+ condcognac:{per:500,items:[["Молоко цельное сгущённое с сахаром 8,5 %",254.6],["Вода",136.7],["Коньяк 40°",108.7]],why:"Сгущёнку размешать с водой, довести до кипения и остудить до 25 °С: в горячей пропитке спирт испаряется вместе с ароматом. Добавить коньяк. Хранить в холодильнике. Крепость пропитки — около 10°."},
+ curacao:{per:500,items:[["Вода", 232.6], ["Сахар", 162.8], ["Глюкозный сироп 38–42 DE (ДЕ)", 46.5], ["Кюрасао 70°", 58.1]],why:"Воду с сахаром и глюкозным сиропом довести до кипения и остудить до 25 °С: в горячей пропитке спирт испаряется вместе с ароматом. Добавить кюрасао. Хранить в холодильнике. Крепость пропитки — 10°."}
+};
+const SOAKS=[
+ {n:"Без пропитки",k:[],t:"Банановый и морковный кексы обычно делают без пропитки."},
+ {n:"Ванильная пропитка",k:"ваниль",rec:"vanilla"},
+ {n:"Лимонная пропитка",k:"лимон",rec:"lemon"},
+ {n:"Карамельная пропитка",k:"карамель",rec:"caramelplain"},
+ {n:"Карамельная пропитка с корицей",k:"корица",rec:"caramel"},
+ {n:"Апельсиновая пропитка",k:"апельсин",rec:"orange"},
+ {n:"Чайная пропитка",k:"эрл грей",rec:"tea"},
+ {n:"Кофейная пропитка",k:"кофе",rec:"coffee"},
+ {n:"Медовая пропитка",k:"мед",rec:"honey"},
+ {n:"Мятная пропитка",k:"мята",rec:"mint"},
+ {n:"Ликёрная пропитка: ром",k:"ром",rec:"rum"},
+ {n:"Ликёрная пропитка: лимончелло",k:"лимон",rec:"limoncello"},
+ {n:"Ликёрная пропитка: мараскино",k:["вишня","кирш"],rec:"cherry"},
+ {n:"Ликёрная пропитка: Гран Марнье",k:"апельсин",rec:"gm"},
+ {n:"Ликёрная пропитка: кюрасао",k:"апельсин",rec:"curacao"},
+ {n:"Ликёрная пропитка: сливочная, на «Бейлисе»",k:["сливки","виски"],rec:"baileys"},
+ {n:"Ликёрная пропитка: сливочная, на сгущёнке с коньяком",k:["сливки","коньяк"],rec:"condcognac"}
+];
+const soakText=x=>{const R=x.rec&&SOAKREC[x.rec];if(!R)return x.t||"";return (R.lead?R.lead+" ":"")+"На кексы из 1 кг теста без добавок — 500 г пропитки: "+R.items.map(it=>it[0].replace(/^(?!Гран )([А-ЯЁ])(?=[а-яё])/,c=>c.toLowerCase())+" — "+fmt(it[1])+" г").join(", ")+". "+R.why;};
+const COATREC={
+ powder:{type:"Посыпка",items:[["Сахарная пудра", 100]],why:"Остывший кекс посыпать сахарной пудрой через сито перед подачей."},
+ lemonglaze:{type:"Сахарная глазурь",items:[["Сахарная пудра", 80], ["Сок лимона", 20]],why:"Сахарную пудру смешать с соком до однородности. Горячий кекс сразу после выпечки пропитать, покрыть глазурью и подсушить 2–3 минуты в духовке при 220 °С, чтобы глазурь закрепилась. Сахарную глазурь наносят сразу после выпечки и пропитки и закрепляют в духовке: если кекс с ней заморозить, при размораживании на глазури оседает влага, сахар растворяется, и глазурь становится липкой."},
+ rumglaze:{type:"Сахарная глазурь",items:[["Сахарная пудра", 80], ["Ром 60°", 10], ["Вода", 10]],why:"Всё смешать холодным. Кекс сразу после выпечки вынуть из формы и пропитать, покрыть глазурью и подсушить 2–3 минуты в духовке при 220 °С, чтобы глазурь закрепилась. Сахарную глазурь наносят сразу после выпечки и пропитки и закрепляют в духовке: если кекс с ней заморозить, при размораживании на глазури оседает влага, сахар растворяется, и глазурь становится липкой."},
+ fondant:{type:"Помадка",items:[["Помадка", 100]],why:"Помадка — это не сахарная глазурь. Сахарная глазурь — сахарная пудра, смешанная с соком, водой или ромом. Помадка — плотная белая сахарная масса: сахарный сироп уваривают и взбивают, пока он не побелеет; обычно её покупают готовой. Помадку подогреть до 37–38 °С и покрыть остывший кекс. Выше 62 °С её не греют: появятся белые пятна, поверхность станет матовой и твёрдой. Если помадка густая, добавляют немного сахарного сиропа 60 °Brix или глюкозного сиропа. Покрытый помадкой кекс не замораживают. Помадка почти целиком состоит из сахара: когда замороженный кекс попадает в тепло, на холодной поверхности оседает влага, она растворяет сахар, и помадка становится мокрой, липкой и тусклой."},
+ apricot:{type:"Абрикосовый гель",items:[["Абрикосовый джем", 100]],why:"Джем прогреть на водяной бане, пока он не станет жидким, и тонким слоем нанести на остывший кекс. Гель даёт блеск, удерживает аромат пропитки и не даёт кексу рано засохнуть."},
+ apricotfondant:{type:"Абрикосовый гель и помадка",items:[],why:"Остывший кекс покрыть абрикосовым джемом, прогретым на водяной бане, а сверху — помадкой, подогретой до 37–38 °С. Помадка — это не сахарная глазурь. Сахарная глазурь — сахарная пудра, смешанная с соком, водой или ромом. Помадка — плотная белая сахарная масса: сахарный сироп уваривают и взбивают, пока он не побелеет; обычно её покупают готовой. Покрытый помадкой кекс не замораживают. Помадка почти целиком состоит из сахара: когда замороженный кекс попадает в тепло, на холодной поверхности оседает влага, она растворяет сахар, и помадка становится мокрой, липкой и тусклой."},
+ dark:{type:"Шоколадная глазурь",items:[["Тёмный шоколад", 90], ["Растительное масло без запаха", 10]],why:"Шоколад растопить до 32 °С, добавить растительное масло без запаха и покрыть холодный кекс при 28–30 °С. Шоколадную глазурь наносят перед продажей. Полив: глазурь льют на холодный или замороженный кекс сверху. Окунание: кекс накалывают на шпажку и окунают; замороженный кекс окунают прямо из морозильника, не размораживая, потом размораживают при +4 °С."},
+ rocher:{type:"Шоколадная глазурь",items:[["Молочный шоколад", 82.2], ["Растительное масло без запаха", 6.4], ["Фундук рубленый", 11.4]],why:"Шоколад растопить до 32 °С, добавить растительное масло без запаха и орехи и покрыть холодный или замороженный кекс при 28 °С. Шоколадную глазурь наносят перед продажей. Полив: глазурь льют на холодный или замороженный кекс сверху. Окунание: кекс накалывают на шпажку и окунают; замороженный кекс окунают прямо из морозильника, не размораживая, потом размораживают при +4 °С."},
+ hazelpaste:{type:"Шоколадная глазурь",items:[["Молочный шоколад 41 %", 77.6], ["Фундучная паста", 18.4], ["Растительное масло без запаха", 4.1]],why:"Шоколад растопить до 30 °С, добавить фундучную пасту и растительное масло без запаха и хорошо перемешать. Покрыть охлаждённый кекс при 28–30 °С. Густоту глазури регулируют количеством масла. Шоколадную глазурь наносят перед продажей. Полив: глазурь льют на холодный или замороженный кекс сверху. Окунание: кекс накалывают на шпажку и окунают; замороженный кекс окунают прямо из морозильника, не размораживая, потом размораживают при +4 °С."},
+ caramelnut:{type:"Шоколадная глазурь",items:[["Карамельный шоколад", 82.2], ["Растительное масло без запаха", 6.4], ["Грецкий орех, крошка", 11.4]],why:"Шоколад растопить до 32 °С, добавить растительное масло без запаха и орехи и покрыть холодный кекс при 28 °С. Шоколадную глазурь наносят перед продажей. Полив: глазурь льют на холодный или замороженный кекс сверху. Окунание: кекс накалывают на шпажку и окунают; замороженный кекс окунают прямо из морозильника, не размораживая, потом размораживают при +4 °С."},
+ white:{type:"Шоколадная глазурь",items:[["Белый шоколад", 90], ["Растительное масло без запаха", 8], ["Йогуртовый порошок", 2]],why:"Шоколад растопить до 30 °С, добавить растительное масло без запаха и йогуртовый порошок и покрыть кекс при 28 °С. Шоколадную глазурь наносят перед продажей. Полив: глазурь льют на холодный или замороженный кекс сверху. Окунание: кекс накалывают на шпажку и окунают; замороженный кекс окунают прямо из морозильника, не размораживая, потом размораживают при +4 °С."}
+};
+const COATS=[
+ {n:"Без покрытия",k:[],t:""},
+ {n:"Сахарная пудра",k:[],rec:"powder"},
+ {n:"Сахарная глазурь на лимонном соке",k:"лимон",rec:"lemonglaze"},
+ {n:"Сахарная глазурь с ромом",k:"ром",rec:"rumglaze"},
+ {n:"Помадка",k:[],rec:"fondant"},
+ {n:"Абрикосовый гель",k:"абрикос",rec:"apricot"},
+ {n:"Абрикосовый гель и помадка",k:"абрикос",rec:"apricotfondant"},
+ {n:"Шоколадная глазурь: тёмный шоколад",k:"шоколад",rec:"dark"},
+ {n:"Шоколадная глазурь: молочный шоколад с фундуком",k:["фундук","молочный шоколад","шоколад"],rec:"rocher"},
+ {n:"Шоколадная глазурь: молочный шоколад с фундучной пастой",k:["фундук","молочный шоколад","шоколад"],rec:"hazelpaste"},
+ {n:"Шоколадная глазурь: карамельный шоколад с грецким орехом",k:["грецкий орех","карамель"],rec:"caramelnut"},
+ {n:"Шоколадная глазурь: белый шоколад с йогуртом",k:"белый шоколад",rec:"white"}
+];
+const coatText=x=>{const R=x.rec&&COATREC[x.rec];if(!R)return x.t||"";return R.type+". "+(R.items.length?"На 100 г покрытия: "+R.items.map(it=>it[0].replace(/^([А-ЯЁ])(?=[а-яё])/,c=>c.toLowerCase())+" — "+fmt(it[1])+" г").join(", ")+". ":"")+R.why;};
+const FORMS=[
+ ["Кекс в форме 120×70×50 (металл)","220 г","150 °С, загрузка 165 °С, конвекция"],["Кекс 70×70×70","150 г","150 °С, конвекция"],
+ ["Silikomart (Силикомарт) САВАРЕН 160×80×40","400 г","150 °С, 50–55 мин"],["Классическая форма для кекса","300–500 г","150–160 °С, 35–40 мин, заслонка закрыта"],
+ ["Маленькие кексы, силикон","70–80 г","160–180 °С, 15–24 мин"],["Мадлен — пласт 40×60","1 500 г","180 °С, 16 мин; заслонка закрыта первые 10 мин"],
+ ["Мадлен маленькие, силикон","—","190 °С, 10 мин"],["Пласт 60×40 — для слоёв, как бисквит","1 000–1 200 г","как мадлен; нарезать и собрать слоями"],
+ ["Кольцо (гугельхопф)","500 г","180–190 °С, 40–45 мин, без конвекции"]
+];
+
+/* ---------- помощники ---------- */
+const lo=v=>Array.isArray(v)?v[0]:v, hi=v=>Array.isArray(v)?v[1]:v;
+const fmt=n=>{const r=Math.round(n*10)/10;return (Number.isInteger(r)?String(r):r.toFixed(1).replace(".",",")).replace(/\B(?=(\d{3})+(?!\d))/g," ")};
+SOAKS.forEach(x=>{if(x.rec)x.t=soakText(x);});
+COATS.forEach(x=>{if(x.rec)x.t=coatText(x);});
+const fmtV=v=>(Array.isArray(v)?(v[1]===0):v===0)?"—":Array.isArray(v)?fmt(v[0])+"–"+fmt(v[1]):fmt(v);
+const esc=s=>String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;");
+const tip=(text,body,u=true)=>!body?esc(text):`<span class="tip${u?" u":""}" tabindex="0">${esc(text)}<span class="bubble" role="tooltip">${esc(body)}</span></span>`;
+let K=1000/BATCH, SELA=1, SELD=0;
+const sc=v=>Array.isArray(v)?[v[0]*K,v[1]*K]:v*K;
+const val=(d,id)=>d.ch[id]!==undefined?d.ch[id]:BASE[id];
+function pair(flav,key){
+  if(!flav||!key) return {cls:"no",mark:"✕"};
+  if(flav===key) return {cls:"b",mark:"●"};
+  const hit=L=>L.some(x=>(x[0]===flav&&x[1]===key)||(x[0]===key&&x[1]===flav));const d=hit(DC)||hit(FP)||hit(CK)||hit(FPX);
+  const tz=(TEZ[flav]||[]).includes(key)||(TEZ[key]||[]).includes(flav);
+  return (d||tz)?{cls:"y",mark:"✓"}:{cls:"no",mark:"✕"};
+}
+const activeFlavs=()=>[AROMA[SELA].k,COMP[SELD].flav].filter(Boolean);
+
+/* ---------- 1. база ---------- */
+function renderBase(){
+  let h=`<thead><tr><th>Ингредиент</th><th class="n h h-base">Базовое, г</th></tr></thead><tbody>`;
+  let tot=0;
+  for(const [id,name,t] of ING){ if(BASE[id]===0) continue; tot+=BASE[id];
+    h+=`<tr><td>${tip(name,t)}</td><td class="n h h-base">${fmtV(sc(BASE[id]))}</td></tr>`; }
+  h+=`<tr class="total"><td>Всего</td><td class="n h h-base">${fmt(tot*K)}</td></tr></tbody>`;
+  document.getElementById("baseT").innerHTML=h;
+}
+/* ---------- 2. аромат ---------- */
+const pct=x=>String(+x.toPrecision(2)).replace(".",","), gr=g=>String(+g.toFixed(2)).replace(".",",");
+const pg=g=>`${pct(g/10)} % · ${gr(g)} г`; // доля от массы теста и граммы на 1 кг
+function renderAroma(){
+  let h=`<thead><tr><th>Аромат</th><th class="n">% от теста без добавок · г на 1 кг</th><th>Как вводить</th></tr></thead><tbody>`;
+  // однородные ароматы — одной строкой, вариант на выбор
+  const GR=[
+   {ids:[1,2,3],name:"Цедра цитрусовых",lab:{1:"лимон",2:"апельсин",3:"лайм"},g:6.6,
+    t:"Цедра лимона, апельсина или лайма — на выбор. Её растирают с сахаром, пока ещё не ввели яйца. Можно класть от 0,35 до 0,82 % от массы теста — от 3,5 до 8,2 г на 1 кг."},
+   {ids:[6,10,11,12],name:"Пряные смеси",lab:{6:"корица, гвоздика, мускат",10:"сухие духи",11:"спекулас",12:"пряник (лебкухен)"},
+    t:null},
+   {ids:[5,8,9],name:"Свежие травы",lab:{5:"мята",8:"базилик",9:"розмарин с серполетом"},t:null}
+  ];
+  AROMA.forEach((a,i)=>{
+    const G=GR.find(x=>x.ids.includes(i));
+    if(G&&i!==G.ids[0]) return;
+    if(G){
+      const on=G.ids.includes(SELA);
+      h+=`<tr class="pickrow${on?" rowsel":""}" data-i="${on?SELA:i}" tabindex="0"><td>${G.name}<div class="citv">${G.ids.map(k=>{const f=FLAVS.find(x=>x.k===AROMA[k].k);return `<button type="button" class="cit h ${f?f.hue:"h-base"}${k===SELA?" on":""}" data-i="${k}">${G.lab[k]}</button>`}).join("")}</div></td><td class="n">${G.t?pg(G.g):(()=>{const A=AROMA[on?SELA:G.ids[0]];return `<b>${pg(A.items.reduce((t,x)=>t+x[1],0))}</b><br>`+A.items.map(x=>esc(x[0].replace(/ молот(ая|ый)/,"").toLowerCase())+" "+gr(x[1])+" г").join("<br>");})()}</td><td>${esc(G.t||AROMA[on?SELA:G.ids[0]].t)}</td></tr>`;
+      return;
+    }
+    const f=FLAVS.find(x=>x.k===a.k);
+    h+=`<tr class="pickrow${i===SELA?" rowsel":""}" data-i="${i}" tabindex="0"><td class="${f?"h "+f.hue:""}">${esc(a.n)}</td><td class="n">${a.items.length?a.items.map(x=>(a.items.length>1?esc(x[0].replace(/ молот(ая|ый)/,"").toLowerCase())+" ":"")+pg(x[1])).join("<br>"):"—"}</td><td>${esc(a.t||"")}</td></tr>`;
+  });
+  document.getElementById("aromaT").innerHTML=h+"</tbody>";
+}
+
+/* ---------- 3. состав ---------- */
+function renderComp(){
+  let h=`<thead><tr><th>Ингредиент</th>${COMP.map((d,i)=>`<th class="n pickable h ${d.hue}${i===SELD?" colsel":""}" data-i="${i}" tabindex="0">${esc(d.name)}<small>${esc(d.sub)}</small></th>`).join("")}</tr></thead><tbody>`;
+  for(const [id,name,t] of ING){
+    h+=`<tr><td>${tip(name,t)}</td>`;
+    COMP.forEach((d,di)=>{
+      const v=val(d,id), b=BASE[id], changed=d.ch[id]!==undefined, cs=" h "+d.hue+(di===SELD?" colsel":"");
+      if(!changed){h+=`<td class="n${b===0?" zero":""}${cs}">${fmtV(sc(v))}</td>`;return;}
+      const dl=lo(v)-b, dh=hi(v)-b;
+      const dtxt=(dl>=0?"+":"−")+(Array.isArray(v)?fmt(Math.abs(dl*K))+"–"+fmt(Math.abs(dh*K)):fmt(Math.abs(dl*K)));
+      h+=`<td class="n ch${cs}">${tip(fmtV(sc(v)),`${dl>=0?"Больше":"Меньше"}, чем в базовом, на ${fmt(Math.abs(dl*K))} г. `+((d.tips&&d.tips[id])||""))}</td>`;
+    });
+    h+=`</tr>`;
+  }
+  h+=`<tr class="total"><td>Всего теста</td>${COMP.map((d,di)=>{let a=0,b=0;for(const [id] of ING){const v=val(d,id);a+=lo(v);b+=hi(v);}return `<td class="n h ${d.hue}${di===SELD?" colsel":""}">${a===b?fmt(a*K):fmt(a*K)+"–"+fmt(b*K)}</td>`}).join("")}</tr></tbody>`;
+  document.getElementById("doughT").innerHTML=h;
+  for(const tr of document.getElementById("doughT").rows)[...tr.cells].forEach((c,ci)=>c.classList.toggle("mh",ci>=2&&ci!==SELD+1));
+}
+/* ---------- 4–6. матрицы ---------- */
+function matrix(el,rows,qHead){
+  const act=activeFlavs();
+  let h=`<thead><tr><th>Вариант</th>${qHead?`<th class="n">${qHead}</th>`:""}${FLAVS.map(f=>`<th style="text-align:center" class="h ${f.hue}${act.includes(f.k)?" colsel":" mh"}">${esc(f.n)}</th>`).join("")}</tr></thead><tbody>`;
+  for(const r of rows){
+    h+=`<tr><td>${tip(r.n,r.t)}</td>${qHead?`<td class="n">${esc(r.q||"—")}</td>`:""}`;
+    for(const f of FLAVS){
+      let best={cls:"no",mark:"✕"};
+      for(const k of [].concat(r.k||[])){const p=pair(f.k,k);if(p.cls!=="no"){best=p;break;}}
+      h+=`<td class="c ${best.cls} h ${f.hue}${act.includes(f.k)?" colsel":" mh"}">${best.mark}</td>`;
+    }
+    h+=`</tr>`;
+  }
+  el.innerHTML=h+"</tbody>";
+}
+function renderMatrices(){
+  matrix(document.getElementById("addT"),ADDS,"На 1 кг теста без добавок");
+  matrix(document.getElementById("soakT"),SOAKS);
+  matrix(document.getElementById("coatT"),COATS);
+}
+document.getElementById("addPairs").innerHTML=ADDPAIRS.map(([n,q])=>`<div class="item"><b>${esc(n)}</b><span>${esc(q)}</span></div>`).join("");
+document.getElementById("formT").innerHTML=`<thead><tr><th>Форма</th><th class="n">Тесто</th><th>Выпечка</th></tr></thead><tbody>`+FORMS.map(f=>`<tr><td>${esc(f[0])}</td><td class="n">${esc(f[1])}</td><td>${esc(f[2])}</td></tr>`).join("")+"</tbody>";
+
+/* ---------- пять рецептов ---------- */
+const SOAK_PER_KG=500; // 2 300 г пропитки на 4 602 г теста
+const SOAK_WHY="На кексы, которые получаются из 1 кг теста без добавок, берут 500 г пропитки — такое же соотношение, как в исходном рецепте.";
+const PAIR_WHY="Когда в кексе две добавки, каждой кладут по 100 г на 1 кг теста без добавок — как в готовых парах «инжир и молочный шоколад», «имбирь и тёмный шоколад».";
+const RCP=[
+ {id:"r1",name:"Лимонный",short:"Лимонный",hue:"h-lemon",flav:["лимон"],comp:[],
+  aroma:{n:"Цедра лимона",ai:1},
+  adds:[{n:"Цукаты лимона",g:250,why:"Цукатов кладут 200–300 г на 1 кг теста без добавок; здесь середина — 250 г. Их вымачивают, обсушивают и обваливают в муке."}],
+  soak:{n:"Лимонная пропитка",rec:"lemon",g:SOAK_PER_KG,why:SOAK_WHY+" "+SOAKREC.lemon.why},
+  coat:{n:"Сахарная глазурь на лимонном соке",rec:"lemonglaze",why:COATREC.lemonglaze.why}},
+ {id:"r2",name:"Шоколадный с вишней",short:"Шоколад · вишня",hue:"h-cherry",flav:["шоколад","вишня"],comp:["cocoa"],
+  aroma:null,
+  adds:[{n:"Цукаты вишни",g:100,why:PAIR_WHY},{n:"Тёмный шоколад кусочками",g:100,why:PAIR_WHY+" Шоколад берут 55–60 % и вводят в конце."}],
+  soak:{n:"Ликёрная пропитка: мараскино",rec:"cherry",g:SOAK_PER_KG,why:SOAK_WHY+" "+SOAKREC.cherry.why},
+  coat:{n:"Шоколадная глазурь: тёмный шоколад",rec:"dark",why:COATREC.dark.why}},
+ {id:"r3",name:"Шоколадный с фундуком и грушей",short:"Фундук · груша",hue:"h-hazel",flav:["шоколад","фундук"],comp:["cocoa","paste"],
+  aroma:null,
+  adds:[{n:"Фундук",g:100,why:"Фундук обжаривают и рубят. Рубленых орехов обычно кладут 10–20 % от массы теста; здесь 100 г, потому что в кексе есть ещё и груша."},{n:"Цукаты груши",g:150,why:"100 г фундука и 150 г груши на 1 кг теста без добавок — как в паре «имбирь и груша»."}],
+  soak:null,
+  coat:{n:"Шоколадная глазурь: молочный шоколад с фундуком",rec:"rocher",why:COATREC.rocher.why}},
+ {id:"r4",name:"Пряный",short:"Пряный",hue:"h-spice",flav:["корица","грецкий орех"],comp:["noisette"],
+  aroma:{n:"Пряности",ai:6},
+  adds:[{n:"Цукаты яблок",g:150,why:"150 г яблок и 100 г ореха на 1 кг теста без добавок — как в паре «имбирь и груша»."},{n:"Грецкий орех",g:100,why:"Рубленых орехов кладут 10–20 % от массы теста."}],
+  soak:{n:"Карамельная пропитка с корицей",rec:"caramel",g:SOAK_PER_KG,why:SOAK_WHY+" "+SOAKREC.caramel.why},
+  coat:{n:"Шоколадная глазурь: карамельный шоколад с грецким орехом",rec:"caramelnut",why:COATREC.caramelnut.why}},
+ {id:"r5",name:"Ванильный",short:"Ванильный",hue:"h-vanilla",flav:["ваниль","миндаль"],comp:["nutflour"],
+  aroma:{n:"Ваниль молотая",ai:4},
+  adds:[{n:"Карамель кусочками",g:100,why:PAIR_WHY},{n:"Белый шоколад кусочками",g:100,why:PAIR_WHY}],
+  alt:"Вместо миндальной муки можно положить кусочки миндаля, 100–200 г на 1 кг теста без добавок.",
+  soak:null,
+  coat:{n:"Шоколадная глазурь: белый шоколад с йогуртом",rec:"white",why:COATREC.white.why}}
+];
+let SELR=0, FOCUS=false, MODE="kg";
+const compMerge=r=>{const ch={},tips={};for(const id of r.comp){const c=COMP.find(x=>x.id===id);Object.assign(ch,c.ch);Object.assign(tips,c.tips||{});}return {ch,tips};};
+const rVal=(r,id)=>{const m=compMerge(r);return m.ch[id]!==undefined?m.ch[id]:BASE[id];};
+
+function renderDonut(){
+  const cx=160,cy=160,R=150,r0=70,n=RCP.length,svg=document.getElementById("donut");
+  const pt=(a,rad)=>[cx+rad*Math.cos(a),cy+rad*Math.sin(a)];
+  let h="";
+  RCP.forEach((rc,i)=>{
+    const a0=-Math.PI/2+i*2*Math.PI/n+0.012, a1=-Math.PI/2+(i+1)*2*Math.PI/n-0.012, sel=i===SELR;
+    const Ro=sel?R+6:R;
+    const [x0,y0]=pt(a0,Ro),[x1,y1]=pt(a1,Ro),[x2,y2]=pt(a1,r0),[x3,y3]=pt(a0,r0);
+    const am=(a0+a1)/2,[tx,ty]=pt(am,(Ro+r0)/2);
+    const words=rc.short.split(" · ");
+    h+=`<g class="seg ${rc.hue}${sel?" on":""}" data-i="${i}" tabindex="0" role="button" aria-pressed="${sel}" aria-label="${esc(rc.name)}">
+      <path d="M${x0},${y0} A${Ro},${Ro} 0 0 1 ${x1},${y1} L${x2},${y2} A${r0},${r0} 0 0 0 ${x3},${y3} Z"/>
+      <text x="${tx}" y="${ty-(words.length-1)*8}" text-anchor="middle">${words.map((w,k)=>`<tspan x="${tx}" dy="${k?16:0}">${esc(w)}</tspan>`).join("")}</text></g>`;
+  });
+  h+=`<text class="core" x="${cx}" y="${cy+9}" text-anchor="middle">Кекс</text>`;
+  svg.innerHTML=h;
+  const r=RCP[SELR], comp=r.comp.map(id=>COMP.find(x=>x.id===id));
+  const line=(t,v)=>`<div class="rrow"><span class="label">${t}</span><b>${v}</b></div>`;
+  document.getElementById("rlist").innerHTML=`<h3 class="h ${r.hue}">${esc(r.name)}</h3>`+
+    line("Аромат",r.aroma?esc(r.aroma.n):"нет")+
+    line("Изменение состава",comp.length?comp.map(c=>esc(c.sub)).join("; "):"нет — базовое тесто")+
+    line("Добавки",r.adds.map(a=>`${esc(a.n.toLowerCase())}, ${fmt(a.g)} г на 1 кг теста без добавок`).join("; "))+
+    line("Пропитка",r.soak?esc(r.soak.n):"нет")+
+    line("Покрытие",r.coat?esc(r.coat.n):"нет")+
+    (r.alt?`<p class="what">${esc(r.alt)}</p>`:"");
+}
+
+function formParams(){
+  const w=Math.max(1,+document.getElementById("mWeight").value||1000);
+  return {w};
+}
+function buildFormPanel(){
+  const w=document.getElementById("mWeight");
+  w.addEventListener("input",()=>{if(MODE!=="form")setMode("form");else renderMain();});
+  w.addEventListener("focus",()=>{if(MODE!=="form"&&w.value)setMode("form");});
+}
+function setMode(m){MODE=m;
+  for(const b of document.querySelectorAll(".tabs [data-mode]")) b.setAttribute("aria-selected",String(b.dataset.mode===m));
+  renderMain();}
+document.querySelector(".tabs").addEventListener("click",e=>{const b=e.target.closest("[data-mode]");if(!b)return;if(b.dataset.mode==="form"&&!document.getElementById("mWeight").value){document.getElementById("mWeight").focus();return;}setMode(b.dataset.mode);});
+function renderMain(){
+  const cols=[{name:"Базовый",hue:"h-base",base:true}].concat(RCP);
+  const FP=MODE==="form"?formParams():null;
+  // масса теста колонки на 1 кг базы и включения на 1 кг теста без добавок
+  const Dc=cols.map((c,i)=>ING.reduce((t,[id])=>{const v=i===0?BASE[id]:rVal(c,id);return t+(lo(v)+hi(v))/2*K;},0));
+  const Ac=cols.map((c,i)=>i===0?0:c.adds.reduce((t,a)=>t+(Array.isArray(a.g)?(a.g[0]+a.g[1])/2:a.g),0));
+  const f=FP?FP.w/1000:1;                                         // с 1 кг на ваш вес
+  const Mc=cols.map((c,i)=>Dc[i]*f);
+  const sd=cols.map(()=>f), sk=cols.map(()=>f);
+  document.getElementById("mainWhat").textContent=FP
+   ?"Все числа пересчитаны на тот вес теста, который вы вписали во вкладке. Поменяйте число — таблица пересчитается сама. Нажмите на любое число, чтобы узнать, откуда оно."
+   :"Здесь все рецепты стоят рядом. В первом столбце — базовый рецепт, за ним пять кексов. Все количества даны на 1 кг базового теста — теста без добавок. Добавки, пропитка и покрытие идут сверх этого килограмма. Если какого-то продукта в кексе больше или меньше, чем в базовом рецепте, или его в базовом рецепте нет совсем, клеточка темнее, а число жирное. Нажмите на такое число: появится, насколько оно отличается от базового и почему. Если выбрать кекс на круге, в таблице яркими останутся только его продукты, остальное побледнеет; чтобы снова видеть все рецепты, нажмите на тот же кекс ещё раз. Нужно другое количество теста? Нажмите на вкладку «На … г теста» и впишите, сколько граммов теста вам нужно, — все числа пересчитаются сами.";
+
+  const ci=i=>i===0?"":(FOCUS&&i-1===SELR?" colsel":"");
+  let h=`<thead><tr><th>Ингредиент</th>${cols.map((c,i)=>`<th class="n h ${c.hue}${ci(i)}${i?" pickable":""}" ${i?`data-r="${i-1}" tabindex="0"`:""}>${esc(c.name)}</th>`).join("")}</tr></thead><tbody>`;
+  const grp=t=>`<tr class="grp"><td colspan="${cols.length+1}">${t}</td></tr>`;
+  h+=grp("Тесто");
+  for(const [id,name,t] of ING){
+    const vals=cols.map((c,i)=>i===0?BASE[id]:rVal(c,id));
+    if(vals.every(v=>hi(v)===0)) continue;
+    h+=`<tr><td>${tip(name,t)}</td>`;
+    cols.forEach((c,i)=>{
+      const v=vals[i], b=BASE[id], m=i?compMerge(c):null, ch=m&&m.ch[id]!==undefined;
+      const sv=x=>Array.isArray(x)?[x[0]*K*sd[i],x[1]*K*sd[i]]:x*K*sd[i];
+      if(!ch){h+=`<td class="n h ${c.hue}${ci(i)}${b===0?" zero":""}">${fmtV(sv(v))}</td>`;return;}
+      const dl=lo(v)-b;
+      h+=`<td class="n ch h ${c.hue}${ci(i)}">${tip(fmtV(sv(v)),(FP?"":`${dl>=0?"Больше":"Меньше"}, чем в базовом, на ${fmt(Math.abs(dl*K))} г. `)+(m.tips[id]||""))}</td>`;
+    });
+    h+=`</tr>`;
+  }
+  h+=`<tr class="total"><td>Тесто без добавок</td>${cols.map((c,i)=>`<td class="n h ${c.hue}${ci(i)}">${fmt(Mc[i])}</td>`).join("")}</tr>`;
+  h+=grp("Аромат");
+  const aItems=[...new Set(RCP.filter(r=>r.aroma).flatMap(r=>AROMA[r.aroma.ai].items.map(x=>x[0])))];
+  for(const an of aItems){
+    h+=`<tr><td>${esc(an)}</td>`;
+    cols.forEach((c,i)=>{const A=i&&c.aroma?AROMA[c.aroma.ai]:null,it=A&&A.items.find(x=>x[0]===an);
+      h+=`<td class="n h ${c.hue}${ci(i)}${it?" ch":" zero"}">${it?tip(fmt(it[1]*sk[i]),A.t):"—"}</td>`;});
+    h+=`</tr>`;
+  }
+  h+=grp("Включения");
+  const addNames=[...new Set(RCP.flatMap(r=>r.adds.map(a=>a.n)))];
+  for(const an of addNames){
+    h+=`<tr><td>${esc(an)}</td>`;
+    cols.forEach((c,i)=>{const a=i?c.adds.find(x=>x.n===an):null;
+      h+=`<td class="n h ${c.hue}${ci(i)}${a?" ch":" zero"}">${a?tip(fmtV(Array.isArray(a.g)?[a.g[0]*sk[i],a.g[1]*sk[i]]:a.g*sk[i]),a.why):"—"}</td>`;});
+    h+=`</tr>`;
+  }
+  h+=`<tr class="total"><td>Тесто с добавками</td>${cols.map((c,i)=>{const ad=i?c.adds.reduce((t,a)=>t+(Array.isArray(a.g)?(a.g[0]+a.g[1])/2:a.g),0):0, ar=i&&c.aroma?AROMA[c.aroma.ai].items.reduce((t,x)=>t+x[1],0):0;return `<td class="n h ${c.hue}${ci(i)}">${fmt(Mc[i]+(ad+ar)*sk[i])}</td>`}).join("")}</tr>`;
+  h+=grp(FP?"Пропитка, на кексы из этого теста":"Пропитка, на кексы из 1 кг теста без добавок");
+  h+=`<tr><td>Пропитка</td>${cols.map((c,i)=>{const s=i?c.soak:null;return `<td class="h ${c.hue}${ci(i)}${s?" ch":" zero"}">${s?tip(s.n,SOAK_WHY+" "+(SOAKREC[s.rec]?SOAKREC[s.rec].why:s.why)):(i?"нет":"—")}</td>`}).join("")}</tr>`;
+  const sNames=[...new Set(RCP.filter(r=>r.soak&&SOAKREC[r.soak.rec]).flatMap(r=>SOAKREC[r.soak.rec].items.map(x=>x[0])))];
+  for(const sn of sNames){
+    h+=`<tr><td>${esc(sn)}</td>${cols.map((c,i)=>{const s=i?c.soak:null,R=s&&SOAKREC[s.rec],it=R&&R.items.find(x=>x[0]===sn);
+      return `<td class="n h ${c.hue}${ci(i)}${it?" ch":" zero"}">${it?tip(fmt(s.g*sk[i]*it[1]/R.per),R.why):"—"}</td>`}).join("")}</tr>`;
+  }
+  const coatWhy=()=>" Сколько покрытия нужно на изделие — в «Ваш рецепт», по форме.";
+  h+=grp("Покрытие, на 100 г покрытия");
+  h+=`<tr><td>Покрытие</td>${cols.map((c,i)=>{const s=i?c.coat:null;return `<td class="h ${c.hue}${ci(i)}${s?" ch":" zero"}">${s?tip(s.n,(COATREC[s.rec]?COATREC[s.rec].why:s.why)+coatWhy(c,i)):"—"}</td>`}).join("")}</tr>`;
+  const cNames=[...new Set(RCP.filter(r=>r.coat&&COATREC[r.coat.rec]).flatMap(r=>COATREC[r.coat.rec].items.map(x=>x[0])))];
+  for(const cn of cNames){
+    h+=`<tr><td>${esc(cn)}</td>${cols.map((c,i)=>{const s=i?c.coat:null,R=s&&COATREC[s.rec],it=R&&R.items.find(x=>x[0]===cn);
+      return `<td class="n h ${c.hue}${ci(i)}${it?" ch":" zero"}">${it?tip(fmt(it[1]),R.why):"—"}</td>`}).join("")}</tr>`;
+  }
+  const T=document.getElementById("mainT");T.innerHTML=h+"</tbody>";
+  // фокус на выбранном кексе: ярко только его колонка и строки его ингредиентов
+  const hue=RCP[SELR].hue, col=SELR+2;
+  T.classList.toggle("focus",FOCUS);
+  for(const tr of T.rows){if(tr.cells.length>2)[...tr.cells].forEach((c,ci)=>c.classList.toggle("mh",ci>=2&&ci!==col));}
+  document.getElementById("mPick").innerHTML=RCP.map((rc,i)=>`<button type="button" class="h ${rc.hue}${i===SELR?" on":""}" data-r="${i}">${esc(rc.name)}</button>`).join("");
+  for(const tr of T.rows){
+    for(const c of tr.cells)c.classList.remove("keep");
+    if(tr.classList.contains("grp"))continue;
+    const c=tr.cells[col],v=c?c.textContent.trim():"";
+    const head=tr.parentElement.tagName==="THEAD";
+    const on=head||(v!==""&&v!=="—"&&v!=="нет");
+    tr.classList.toggle("inrec",FOCUS&&on&&!head);
+    if(on){tr.cells[0].classList.add("keep");if(c)c.classList.add("keep");}
+    const n=tr.cells[0];[...n.classList].filter(x=>x.startsWith("h-")).forEach(x=>n.classList.remove(x));n.classList.remove("h");
+    if(FOCUS&&on&&!head)n.classList.add("h",hue);
+  }
+}
+
+function alts(list,current,flav){
+  let out=list.filter(x=>x.n!==current&&[].concat(x.k||[]).some(k=>flav.some(f=>pair(f,k).cls!=="no")));
+  if(list===SOAKS){
+    const cof=SOAKS.find(x=>x.n==="Кофейная пропитка");
+    if(cof&&current!==cof.n&&!out.includes(cof)) out.unshift(cof);
+  }
+  return out.slice(0,6).map(x=>x.n);
+}
+// описание варианта для раскрытия по нажатию
+function evoInfo(name){
+  const A=AROMA.find(x=>x.n===name);if(A)return (A.items.length?"Сколько класть: "+A.items.map(x=>(A.items.length>1?x[0].toLowerCase()+" — ":"")+fmt(x[1])+" г").join(", ")+" на 1 кг теста без добавок. ":"")+(A.t||"");
+  const C=COMP.find(x=>x.name===name);if(C)return C.sub[0].toUpperCase()+C.sub.slice(1)+". "+Object.values(C.tips||{}).join(" ");
+  const D=ADDS.find(x=>x.n===name);if(D)return (D.q?"Сколько класть: "+D.q+" на 1 кг теста без добавок. ":"")+(D.t||"");
+  const S=SOAKS.find(x=>x.n===name);if(S)return S.t||"";
+  const K2=COATS.find(x=>x.n===name);if(K2)return K2.t||"";
+  return "";
+}
+let EVO_OPEN=null;
+function renderEvo(){
+  const r=RCP[SELR];
+  document.getElementById("evoTitle").textContent="Из чего собран кекс: "+r.name.toLowerCase();
+  const compNames=r.comp.map(id=>COMP.find(x=>x.id===id).name);
+  const steps=[
+   {t:"Базовый рецепт",d:"Тесто, с которого начинается любой кекс.",c:["Базовое тесто"],a:[]},
+   {t:"Аромат",d:"Меняет вкус и запах, не меняя основной состав рецепта.",c:r.aroma?[r.aroma.n]:[],a:alts(AROMA.filter(x=>x.k),r.aroma&&r.aroma.n,r.flav)},
+   {t:"Изменение состава",d:"Вместо части муки или сливочного масла кладут другое — меняются вкус и текстура.",c:compNames,a:COMP.filter(x=>!r.comp.includes(x.id)&&x.id!=="base").map(x=>x.name)},
+   {t:"Включения",d:"Кусочки, которые вмешивают в готовое тесто.",c:r.adds.map(a=>a.n),a:alts(ADDS,"",r.flav).filter(n=>!r.adds.some(a=>a.n===n))},
+   {t:"Пропитка",d:"Пропитка — ею пропитывают горячий кекс сразу из формы.",c:r.soak?[r.soak.n]:[],a:alts(SOAKS,r.soak&&r.soak.n,r.flav)},
+   {t:"Покрытие",d:"Глазурь или шоколад поверх кекса — меняет его внешний вид.",c:r.coat?[r.coat.n]:[],a:alts(COATS,r.coat&&r.coat.n,r.flav)}
+  ];
+  const chip=(n,i,sel)=>`<button type="button" class="vchip${sel?" sel":""}${EVO_OPEN&&EVO_OPEN.i===i&&EVO_OPEN.n===n?" open":""}" data-i="${i}" data-n="${esc(n)}">${esc(n)}</button>`;
+  document.getElementById("evoBox").innerHTML=steps.map((s,i)=>{
+    const open=EVO_OPEN&&EVO_OPEN.i===i?EVO_OPEN.n:null, info=open?evoInfo(open):"";
+    return `<div class="plate h ${r.hue}"><h3><span class="pnum">${i+1}</span>${esc(s.t)}</h3><p class="pdesc">${esc(s.d)}</p>
+      <span class="alt-h">в этом кексе</span><div class="alts">${s.c.length?s.c.map(n=>chip(n,i,true)).join(""):`<span class="none">не используется</span>`}</div>
+      ${s.a.length?`<span class="alt-h">возможные варианты</span><div class="alts">${s.a.map(n=>chip(n,i,false)).join("")}</div>`:""}
+      ${open?`<div class="vinfo"><b>${esc(open)}</b>${info?`<span>${esc(info)}</span>`:`<span>Подробностей пока нет.</span>`}</div>`:""}</div>`;}).join("");
+}
+document.getElementById("evoBox").addEventListener("click",e=>{const b=e.target.closest(".vchip");if(!b)return;const i=+b.dataset.i,n=b.dataset.n;
+  EVO_OPEN=(EVO_OPEN&&EVO_OPEN.i===i&&EVO_OPEN.n===n)?null:{i,n};renderEvo();});
+function setR(i){FOCUS=!(FOCUS&&SELR===i);SELR=i;EVO_OPEN=null;renderAll();}
+document.getElementById("donut").addEventListener("click",e=>{const g=e.target.closest("g.seg");if(g)setR(+g.dataset.i);});
+document.getElementById("donut").addEventListener("keydown",e=>{const g=e.target.closest("g.seg");if(g&&(e.key==="Enter"||e.key===" ")){e.preventDefault();setR(+g.dataset.i);}});
+
+document.getElementById("mainT").addEventListener("click",e=>{const th=e.target.closest("th.pickable");if(th)setR(+th.dataset.r);});
+document.getElementById("mPick").addEventListener("click",e=>{const b=e.target.closest("[data-r]");if(!b)return;SELR=+b.dataset.r;EVO_OPEN=null;renderAll();});
+
+/* ---------- мой рецепт: любая форма и количество ---------- */
+const SHAPES=[{id:"rect",n:"Прямоугольная"},{id:"round",n:"Круглая"},{id:"ring",n:"Кольцо (с трубкой)"}];
+const PTYPES=[{id:"tall",n:"Высокий кекс",norm:2.8,range:"2,5–3,2"},{id:"layer",n:"Пласт, корж",norm:1.45,range:"1,3–1,6"}];
+const PRESETS=[
+ {n:"Пример: металлическая 120×70×50",s:"rect",L:120,W:70,H:50,t:"tall"},
+ {n:"Пример: 70×70×70",s:"rect",L:70,W:70,H:70,t:"tall"},
+ {n:"Пример: круглая Ø20, высота 5 см",s:"round",D:200,H:50,t:"layer"},
+ {n:"Пример: кольцо Ø22 / трубка Ø8, высота 10 см",s:"ring",D:220,Di:80,H:100,t:"tall"}
+];
+const CHOC_RHO=1.25, SUGAR_GLAZE_RHO=1.43, OTHER_RHO=1.0, GLAZE_LOSS=0.03;
+// нормы покрытия — «Рецептуры на торты, пирожные, кексы и рулеты», ч. III, М.: Пищевая промышленность, 1978
+function coatNorm(n,m){
+  const choc=/шоколад|глазурь шоколадно/i.test(n), fond=/сахарная глазурь|помадк|ромовая глазурь/i.test(n);
+  if(choc&&m==="pour") return {p:15.2,loss:0.72,why:"глазурь льют сверху, она закрывает верх и небольшую часть боков."};
+  if(choc&&m==="dip") return {p:null,why:"Для кекса, окунутого в шоколад, нормы нет. У мелких пирожных (45 г) шоколада 22,2 %, у кекса доля меньше: поверхности на грамм у него меньше. Впишите долю в поле «Покрытие, % массы изделия»."};
+  if(fond&&m==="dip") return {p:13.6,loss:1.13,why:"кекс окунают верхом в помадку."+(/сахарная глазурь/i.test(n)?" Для сахарной глазури доля та же, что для помады.":"")};
+  if(fond&&m==="pour") return {p:null,why:"Для полива помадой или сахарной глазурью нормы нет. У кексов под помадой её 9,5–12 % массы, у тортов, покрытых только сверху, — 10–12 %. Впишите долю в поле «Покрытие, % массы изделия»."};
+  return null;
+}
+
+const isChoc=n=>/шоколад/i.test(n);
+const numOf=q=>{const m=String(q||"").match(/(\d+)(?:–(\d+))?/);if(!m)return 100;return m[2]?(+m[1]+ +m[2])/2:+m[1];};
+function buildCalcUI(){
+  const opt=(arr,f)=>arr.map((x,i)=>`<option value="${i}">${esc(f(x))}</option>`).join("");
+  document.getElementById("calcIn").innerHTML=`
+   <label for="cBase">Основа<select id="cBase"><option value="">Простая</option><option value="cocoa">С какао</option><option value="nutflour">С миндальной мукой</option></select></label>
+   <label for="cFat">Жир<select id="cFat"><option value="">Сливочное масло</option><option value="noisette">Нуазет</option><option value="paste">Часть сливочного масла — фундучная паста</option></select></label>
+   <label for="cAroma">Аромат<select id="cAroma">${opt(AROMA,a=>a.n)}</select></label>
+   <label for="cSoak">Пропитка<select id="cSoak">${opt(SOAKS,a=>a.n)}</select></label>
+   <label for="cCoat">Покрытие<select id="cCoat">${opt(COATS,a=>a.n)}</select></label>
+   <label for="cMeth">Как покрываем<select id="cMeth"><option value="pour">Полив сверху</option><option value="dip">Окунание</option></select></label>
+   <label for="cShare">Покрытие, % массы изделия<input id="cShare" type="number" min="1" max="40" step="0.1" placeholder="по норме"></label>
+   <fieldset class="adds"><legend>Форма</legend>
+     <label for="cPreset">Подставить пример<select id="cPreset"><option value="">— свои размеры —</option>${opt(PRESETS,p=>p.n)}</select></label>
+     <label for="cShape">Тип формы<select id="cShape">${opt(SHAPES,s=>s.n)}</select></label>
+     <label for="cType">Что печём<select id="cType">${opt(PTYPES,p=>p.n+" · "+p.range+" г на см² дна")}</select></label>
+     <label for="cNorm">Норма, г на 1 см² дна<input id="cNorm" type="number" min="0.5" max="6" step="0.05" value="2.8"></label>
+     <label class="fL" for="cL">Длина, мм<input id="cL" type="number" min="10" value="180"></label>
+     <label class="fW" for="cW">Ширина, мм<input id="cW" type="number" min="10" value="80"></label>
+     <label class="fD" for="cD">Диаметр, мм<input id="cD" type="number" min="10" value="200"></label>
+     <label class="fDi" for="cDi">Диаметр трубки, мм<input id="cDi" type="number" min="5" value="80"></label>
+     <label for="cH">Высота стенки, мм<input id="cH" type="number" min="5" value="60"></label>
+     <label for="cCount">Сколько изделий<input id="cCount" type="number" min="1" max="500" step="1" value="6"></label>
+     <label for="cRho">Плотность теста, г/мл<input id="cRho" type="number" min="0.5" max="1.6" step="0.01" placeholder="из пробы"></label>
+     <label for="cRise">Подъём, раз<input id="cRise" type="number" min="1" max="5" step="0.1" value="2.5"></label>
+   </fieldset>
+   <fieldset class="adds"><legend>Включения, г на 1 кг теста без добавок</legend>
+     ${ADDS.map((a,i)=>`<div class="addrow"><input type="checkbox" id="cA${i}"><label for="cA${i}">${esc(a.n)}</label><input type="number" id="cG${i}" min="0" max="500" step="10" value="${numOf(a.q)}" aria-label="${esc(a.n)}, г на 1 кг"></div>`).join("")}
+   </fieldset>`;
+  const $=id=>document.getElementById(id);
+  $("calcIn").addEventListener("input",e=>{
+    if(e.target.id==="cType") $("cNorm").value=PTYPES[+$("cType").value].norm;
+    if(e.target.id==="cPreset"&&$("cPreset").value!==""){const p=PRESETS[+$("cPreset").value];
+      $("cShape").value=String(SHAPES.findIndex(s=>s.id===p.s));
+      for(const k of ["L","W","D","Di","H"]) if(p[k]!==undefined) $("c"+k).value=p[k];
+      const ti=PTYPES.findIndex(t=>t.id===p.t);$("cType").value=String(ti);$("cNorm").value=PTYPES[ti].norm;}
+    renderCalc();
+  });
+}
+function geom(s,L,W,D,Di,H){ // мм → см², см
+  const l=L/10,w=W/10,d=D/10,di=Di/10,h=H/10,pi=Math.PI;
+  if(s==="rect") return {base:l*w,coat:l*w+2*(l+w)*h,desc:`дно ${L}×${W} мм`};
+  if(s==="round") return {base:pi*d*d/4,coat:pi*d*d/4+pi*d*h,desc:`дно Ø${D} мм`};
+  return {base:pi*(d*d-di*di)/4,coat:pi*(d*d-di*di)/4+pi*(d+di)*h,desc:`кольцо Ø${D}/${Di} мм`};
+}
+function renderCalc(){
+  const $=id=>document.getElementById(id);
+  const comp=[$("cBase").value,$("cFat").value].filter(Boolean);
+  const ch={};for(const id of comp)Object.assign(ch,COMP.find(x=>x.id===id).ch);
+  const K1=1000/BATCH, per={};let McLo=0,McHi=0;
+  for(const [id] of ING){const v=ch[id]!==undefined?ch[id]:BASE[id];per[id]=Array.isArray(v)?[v[0]*K1,v[1]*K1]:v*K1;McLo+=lo(per[id]);McHi+=hi(per[id]);}
+  const Mc=(McLo+McHi)/2;
+  const adds=ADDS.map((a,i)=>({a,on:$("cA"+i).checked,g:+$("cG"+i).value||0})).filter(x=>x.on&&x.g>0);
+  const addPerKg=adds.reduce((s,x)=>s+x.g,0);
+  const shape=SHAPES[+$("cShape").value].id;
+  for(const [c,on] of [["fL",shape==="rect"],["fW",shape==="rect"],["fD",shape!=="rect"],["fDi",shape==="ring"]]) document.querySelector("."+c).hidden=!on;
+  const L=+$("cL").value,W=+$("cW").value,D=+$("cD").value,Di=+$("cDi").value,H=+$("cH").value;
+  const G=geom(shape,L,W,D,Di,H);
+  const norm=+$("cNorm").value||2.8, pt=PTYPES[+$("cType").value];
+  const fill=G.base*norm;
+  const count=Math.max(1,+$("cCount").value||1);
+  const need=count*fill;
+  const arPerKg=AROMA[+$("cAroma").value].items.reduce((t,x)=>t+x[1],0);
+  const f=need/(Mc*(1+(addPerKg+arPerKg)/1000));
+  const doughMass=Mc*f;
+  // проверка высоты
+  const rho=+$("cRho").value, rise=+$("cRise").value||2.5;
+  let check="";
+  if(rho>0){const depth=fill/(rho*G.base)*10, risen=depth*rise;
+    check=`Слой теста в форме ≈ ${fmt(depth)} мм; после подъёма в ${String(rise).replace(".",",")} раза ≈ ${fmt(risen)} мм при стенке ${H} мм — ${risen<=H?"останется ниже края":"поднимется выше стенки на "+fmt(risen-H)+" мм (купол) — сверить с пробой"}.`;}
+  else check="Чтобы проверить, поместится ли тесто по высоте, впишите плотность теста из пробы (г/мл).";
+  let rows="";
+  const row=(n,v,why,cls="")=>{const vv=typeof v==="string"?v:fmtV(v);rows+=`<tr class="${cls}"><td>${esc(n)}</td><td class="n">${why?tip(vv,why):esc(vv)}</td></tr>`;};
+  const grp=t=>{rows+=`<tr class="grp"><td colspan="2">${t}</td></tr>`;};
+  grp("Тесто");
+  for(const [id,name,t] of ING){const v=per[id];if(hi(v)===0)continue;row(name,Array.isArray(v)?[v[0]*f,v[1]*f]:v*f,t,ch[id]!==undefined?"chg":"");}
+  const ar=AROMA[+$("cAroma").value];
+  if(ar.items.length){grp("Аромат");for(const [an,ag] of ar.items)row(an,ag*doughMass/1000,ar.t);}
+  if(adds.length){grp("Включения");for(const x of adds)row(x.a.n,x.g*doughMass/1000,`${x.g} г на 1 кг теста без добавок. ${x.a.t||""}`);}
+  const so=SOAKS[+$("cSoak").value];
+  if(so.n!=="Без пропитки"){grp("Пропитка");const sg=SOAK_PER_KG*doughMass/1000;row(so.n,sg,"На кексы из этого теста. "+SOAK_WHY+" "+so.t);
+    const sp=so.rec&&SOAKREC[so.rec]?SOAKREC[so.rec].items:null;
+    if(sp){const tot=sp.reduce((s,x)=>s+x[1],0);for(const [pn,pg] of sp)row("  в том числе "+pn,sg*pg/tot,`${fmt(pg/tot*100)} % пропитки.`);}}
+  const co=COATS[+$("cCoat").value];
+  let coatNote="";
+  if(co.k&&[].concat(co.k).length){
+    grp("Покрытие");
+    const N=coatNorm(co.n,$("cMeth").value);
+    if(!N){row(co.n,"—",`Для этого покрытия нормы расхода нет.`);}
+    const share=+$("cShare").value||(N&&N.p?N.p:0);
+    if(N&&!share){row(co.n,"впишите долю",N.why);}
+    const cake=fill, onOne=cake*share/(100-share), onCakes=onOne*count, loss=N&&N.loss?N.loss:1, total=onCakes*(1+loss/100);
+    if(N&&share) row(co.n,total,`Покрытие — ${String(share).replace(".",",")} % массы готового изделия: ${N.why} Кекс без покрытия — ${fmt(cake)} г (масса теста в форме, без учёта упёка), покрытия на него ${fmt(onOne)} г. На ${count} шт. — ${fmt(onCakes)} г, и ${String(loss).replace(".",",")} % потерь при покрытии.`);
+    const parts=co.rec&&COATREC[co.rec]&&COATREC[co.rec].items.length?COATREC[co.rec].items.map(x=>[x[0].toLowerCase(),x[1]]):null;
+    if(parts&&N&&share)for(const [pn,pc] of parts)row("  в том числе "+pn,total*pc/100,`${pc} % покрытия.`);
+    coatNote="Доля покрытия: у кекса в шоколаде глазурь — 15,2 % массы изделия, у кексов под помадой — 9,5–13,6 %. Долю можно поправить. Чтобы полить кекс сплошной завесой, глазури в посуде нужно больше: излишек стекает и снова идёт в работу, в расход он не входит.";
+  }
+  let frows=`<tr class="grp"><td colspan="2">Форма</td></tr>`;
+  const fr=(n,v,why)=>{frows+=`<tr><td>${esc(n)}</td><td class="n">${why?tip(v,why):esc(v)}</td></tr>`;};
+  fr("Изделий, шт.",String(count),"");
+  fr("Площадь дна, см²",fmt(G.base),`${SHAPES.find(s=>s.id===shape).n}, ${G.desc}.`);
+  fr("Тесто в одну форму, г",fmt(fill),`Площадь дна ${fmt(G.base)} см² × ${String(norm).replace(".",",")} г на 1 см² (${pt.n.toLowerCase()}: ${pt.range} г на см² дна).`);
+  fr("Всего теста с включениями, г",fmt(need),`${count} шт. × ${fmt(fill)} г.`);
+  if(rho>0){const depth=fill/(rho*G.base)*10, risen=depth*rise;
+    fr("Слой теста в форме, мм",fmt(depth),`${fmt(fill)} г ÷ (${String(rho).replace(".",",")} г/мл × ${fmt(G.base)} см²).`);
+    fr("После подъёма, мм",fmt(risen),`Слой × подъём ${String(rise).replace(".",",")}. Стенка ${H} мм — ${risen<=H?"ниже края":"купол над краем "+fmt(risen-H)+" мм; сверить с пробой"}.`);}
+  else fr("После подъёма, мм","—","Впишите плотность теста из пробы (г/мл) — посчитаю высоту слоя и купол.");
+  $("calcOut").innerHTML=`
+   <div class="tablebox"><table class="calcT"><tbody>${frows}</tbody></table></div>
+   <div class="tablebox"><table class="calcT"><thead><tr><th>Ингредиент</th><th class="n">г</th></tr></thead><tbody>${rows}</tbody></table></div>
+   <p class="what">Закладка считается от площади дна: у высоких кексовых форм 2,5–3,2 г теста на 1 см² дна, у низких коржей 1,3–1,6 г. Норму можно поправить под свою пробу. Жирным — что изменилось относительно базового теста; наведите на строку — откуда число. ${esc(coatNote)}</p>`;
+}
+
+/* ---------- выбор и связи ---------- */
+document.getElementById("dsel").innerHTML=COMP.map((d,i)=>`<label class="chip"><input type="radio" name="dsel" id="dsel-${i}" value="${i}"><span>${esc(d.name)}</span></label>`).join("");
+function renderAll(){
+  document.getElementById("dsel-"+SELD).checked=true;
+  renderDonut(); renderMain(); renderEvo(); renderAroma(); renderComp(); renderMatrices();
+}
+const setA=i=>{SELA=i;renderAll();}, setD=i=>{SELD=i;renderAll();};
+document.getElementById("dsel").addEventListener("change",e=>setD(+e.target.value));
+
+const at=document.getElementById("aromaT");
+at.addEventListener("click",e=>{const c=e.target.closest(".cit");if(c){setA(+c.dataset.i);return;}const r=e.target.closest("tr.pickrow");if(r)setA(+r.dataset.i);});
+at.addEventListener("keydown",e=>{const r=e.target.closest("tr.pickrow");if(r&&(e.key==="Enter"||e.key===" ")){e.preventDefault();setA(+r.dataset.i);}});
+const dt=document.getElementById("doughT");
+dt.addEventListener("click",e=>{const th=e.target.closest("th.pickable");if(th)setD(+th.dataset.i);});
+dt.addEventListener("keydown",e=>{const th=e.target.closest("th.pickable");if(th&&(e.key==="Enter"||e.key===" ")){e.preventDefault();setD(+th.dataset.i);}});
+function hoverCols(table){
+  const clear=()=>table.querySelectorAll(".colhover").forEach(c=>c.classList.remove("colhover"));
+  table.addEventListener("mouseover",e=>{const c=e.target.closest("td,th");if(!c||c.cellIndex<1)return;clear();
+    for(const row of table.rows){const x=row.cells[c.cellIndex];if(x)x.classList.add("colhover");}});
+  table.addEventListener("mouseleave",clear);
+}
+["mainT","doughT","addT","soakT","coatT"].forEach(id=>hoverCols(document.getElementById(id)));
+buildCalcUI();
+buildFormPanel();
+renderAll();
+renderCalc();
+
+
+/* ---------- плавающая подсказка ---------- */
+(function(){
+  const ft=document.createElement("div");ft.id="floatTip";ft.hidden=true;ft.setAttribute("role","tooltip");document.body.appendChild(ft);
+  let cur=null;
+  const show=el=>{const b=el.querySelector(".bubble");if(!b)return;cur=el;ft.innerHTML=b.innerHTML;ft.hidden=false;
+    const r=el.getBoundingClientRect(),fw=ft.offsetWidth,fh=ft.offsetHeight;
+    let x=Math.min(Math.max(8,r.left),window.innerWidth-fw-8), y=r.bottom+8;
+    if(y+fh>window.innerHeight-8) y=Math.max(8,r.top-fh-8);
+    ft.style.left=x+"px";ft.style.top=y+"px";};
+  const hide=()=>{cur=null;ft.hidden=true;};
+  document.addEventListener("mouseover",e=>{const el=e.target.closest(".tip");if(el&&el!==cur)show(el);else if(!el&&cur)hide();});
+  document.addEventListener("focusin",e=>{const el=e.target.closest(".tip");if(el)show(el);});
+  document.addEventListener("focusout",hide);
+  document.addEventListener("click",e=>{const el=e.target.closest(".tip");if(el){el===cur?hide():show(el);}});
+  window.addEventListener("scroll",hide,true);
+})();
+
+/* ---------- карта сочетаний ---------- */
+(function(){
+  const GROUPS=[
+   {n:"Цитрусы",c:"#f2c94c",k:["лимон","апельсин","лайм","грейпфрут","мандарин"]},
+   {n:"Пряности и травы",c:"#d98b6a",k:["ваниль","корица","мускатный орех","имбирь","гвоздика","кардамон","душистый перец","бадьян","анис","чёрный перец","кориандр","шафран","мята","базилик","розмарин","тимьян"]},
+   {n:"Чай и кофе",c:"#9a7b5c",k:["эрл грей","матча","кофе"]},
+   {n:"Шоколад и карамель",c:"#8a5a3e",k:["шоколад","молочный шоколад","белый шоколад","карамель"]},
+   {n:"Мёд и сиропы",c:"#e0a43c",k:["мед","патока","кленовый сироп","тёмный сахар"]},
+   {n:"Сливки и молочное",c:"#c9b79c",k:["сливки","сливочный сыр","рикотта","нуазет"]},
+   {n:"Орехи и семена",c:"#b89060",k:["миндаль","грецкий орех","фундук","фисташки","пекан","кокос","каштан","мак","кунжут","арахис"]},
+   {n:"Фрукты и ягоды",c:"#d46a7e",k:["банан","яблоко","груша","абрикос","вишня","малина","клубника","черника","клюква","ежевика","слива","персик","ананас","маракуйя","инжир","изюм","финики"]},
+   {n:"Овощи",c:"#8fb36a",k:["морковь","тыква","кабачок"]},
+   {n:"Алкоголь",c:"#7b8fc7",k:["ром","коньяк","виски","херес","кирш"]}
+  ];
+  const groupOf=k=>GROUPS.find(g=>g.k.includes(k));
+  const keys=GROUPS.flatMap(g=>g.k);
+  const edges=[];
+  for(let i=0;i<keys.length;i++)for(let j=i+1;j<keys.length;j++){if(pair(keys[i],keys[j]).cls==="y")edges.push([i,j]);}
+  const deg=keys.map((_,i)=>edges.filter(e=>e[0]===i||e[1]===i).length);
+  const idx=keys.map((k,i)=>i);
+  // вкусы по кругу секторами групп, между группами — промежуток
+  const W=1000,H=1000,cx=W/2,cy=H/2,R=300,GAP=1.6;
+  const slots=keys.length+GROUPS.length*GAP;let pos=0;const ang=[];
+  GROUPS.forEach(g=>{g.k.forEach(()=>{ang.push(-Math.PI/2+2*Math.PI*(pos+0.5)/slots);pos+=1;});pos+=GAP;});
+  const P=keys.map((k,i)=>({x:cx+R*Math.cos(ang[i]),y:cy+R*Math.sin(ang[i]),a:ang[i]}));
+  const cap=s=>s==="шоколад"?"Тёмный шоколад и какао":s[0].toUpperCase()+s.slice(1);
+  const svg=document.getElementById("fgraph");
+  const grads=GROUPS.map((g,gi)=>`<radialGradient id="gg${gi}" cx="35%" cy="30%" r="75%"><stop offset="0%" stop-color="#fff" stop-opacity=".85"/><stop offset="45%" stop-color="${g.c}"/><stop offset="100%" stop-color="${g.c}" stop-opacity=".95"/></radialGradient>`).join("");
+  let h=`<defs>${grads}<radialGradient id="coreGrad" cx="35%" cy="30%" r="80%"><stop offset="0%" stop-color="#fff3d6"/><stop offset="60%" stop-color="#f3b768"/><stop offset="100%" stop-color="#e59e6d"/></radialGradient></defs>`;
+  h+=`<circle class="orbit" cx="${cx}" cy="${cy}" r="${R}"/>`;
+  h+=edges.map(([i,j])=>{const qx=cx+((P[i].x+P[j].x)/2-cx)*0.25,qy=cy+((P[i].y+P[j].y)/2-cy)*0.25;
+    return `<path class="e" data-a="${i}" data-b="${j}" d="M${P[i].x.toFixed(1)},${P[i].y.toFixed(1)} Q${qx.toFixed(1)},${qy.toFixed(1)} ${P[j].x.toFixed(1)},${P[j].y.toFixed(1)}"/>`;}).join("");
+  h+=`<g class="core"><circle class="ring" cx="${cx}" cy="${cy}" r="56"/><circle class="ring" cx="${cx}" cy="${cy}" r="68" stroke-dasharray="3 5"/><circle class="disc" cx="${cx}" cy="${cy}" r="44"/><text x="${cx}" y="${cy+6}" text-anchor="middle">Кекс</text></g>`;
+  h+=idx.map(i=>{const gi=GROUPS.indexOf(groupOf(keys[i])),g=GROUPS[gi],r=6+Math.min(8,deg[i]*0.35),deg2=P[i].a*180/Math.PI,left=Math.cos(P[i].a)<0,lx=cx+(R+r+10)*Math.cos(P[i].a),ly=cy+(R+r+10)*Math.sin(P[i].a);
+    return `<g class="gn" data-i="${i}" tabindex="0" role="button" aria-label="${esc(cap(keys[i]))}" style="--c:${g.c}"><circle class="halo" cx="${P[i].x.toFixed(1)}" cy="${P[i].y.toFixed(1)}" r="${(r+6).toFixed(1)}"/><circle class="dot" cx="${P[i].x.toFixed(1)}" cy="${P[i].y.toFixed(1)}" r="${r.toFixed(1)}" fill="url(#gg${gi})"/><text x="${lx.toFixed(1)}" y="${ly.toFixed(1)}" dy="0.35em" text-anchor="${left?"end":"start"}" transform="rotate(${(left?deg2+180:deg2).toFixed(1)} ${lx.toFixed(1)} ${ly.toFixed(1)})">${esc(cap(keys[i]))}</text></g>`;}).join("");
+  svg.innerHTML=h;
+  document.getElementById("gLegend").innerHTML=GROUPS.map(g=>`<span><i style="background:${g.c}"></i>${g.n}</span>`).join("");
+  const chips=document.createElement("div");chips.id="gChips";
+  chips.innerHTML=GROUPS.map(g=>`<div class="gg"><span>${g.n}</span><div>${g.k.map(k=>{const i=keys.indexOf(k);return `<button type="button" data-i="${i}" style="--c:${g.c}">${esc(cap(k))}</button>`;}).join("")}</div></div>`).join("");
+  svg.parentNode.insertBefore(chips,svg);
+  chips.addEventListener("click",e=>{const b=e.target.closest("button[data-i]");if(b)select(+b.dataset.i);});
+  let sel=null;
+  function select(i){
+    sel=(sel===i)?null:i;
+    const nb=new Set(sel===null?[]:edges.filter(e=>e[0]===sel||e[1]===sel).map(e=>e[0]===sel?e[1]:e[0]));
+    svg.querySelectorAll(".gn").forEach(n=>{const k=+n.dataset.i;n.classList.toggle("sel",k===sel);n.classList.toggle("nb",nb.has(k));n.classList.toggle("dim",sel!==null&&k!==sel&&!nb.has(k));});
+    svg.querySelectorAll("path.e").forEach(l=>{const a=+l.dataset.a,b=+l.dataset.b,on=sel!==null&&(a===sel||b===sel);l.classList.toggle("hl",on);l.classList.toggle("dim",sel!==null&&!on);});
+    document.getElementById("gTitle").textContent=sel===null?"Выберите вкус":cap(keys[sel])+" сочетается с:";
+    document.querySelectorAll("#gChips button").forEach(b=>{const k=+b.dataset.i;b.classList.toggle("on",k===sel);b.classList.toggle("nb",nb.has(k));});
+    document.getElementById("gList").innerHTML=[...nb].sort((a,b)=>keys[a].localeCompare(keys[b],"ru")).map(k=>`<span>${esc(cap(keys[k]))}</span>`).join("");
+  }
+  svg.addEventListener("click",e=>{const g=e.target.closest(".gn");if(g)select(+g.dataset.i);else if(sel!==null)select(sel);});
+  svg.addEventListener("keydown",e=>{const g=e.target.closest(".gn");if(g&&(e.key==="Enter"||e.key===" ")){e.preventDefault();select(+g.dataset.i);}});
+})();
+/* ---------- рецепты для печати ---------- */
+let PSEL=0;
+const PRECS=[{name:"Базовый",hue:"h-base",comp:[],aroma:null,adds:[],soak:null,coat:null}].concat(RCP);
+const BUTTER_LINE=150; // г на замес Ольги — масляная дорожка
+function pSteps(r,g){
+  const m=compMerge(r).ch, v=id=>m[id]!==undefined?m[id]:BASE[id], has=id=>v(id)>0;
+  const A=r.aroma?AROMA[r.aroma.ai]:null, rub=A&&/Цедра|Ваниль/.test(A.n), sift=A&&!rub;
+  const inv=has("invert")?", инвертный сахар":"";
+  const liq="сливки";
+  const egg=has("almond")?"с яйцами и миндальной мукой":"с яйцами";
+  const S=[];
+  const end=`${egg} до однородности — можно венчиком или лопаткой, на выбор. Затем добавить ${liq} и перемешать до полного объединения.`;
+  if(rub) S.push(`Сахар растереть с ${A.n==="Цедра лимона"?"лимонной цедрой":"молотой ванилью"}, добавить соль и растереть ${end}`);
+  else S.push(`Сахар${has("invert")?", инвертный сахар":""} и соль растереть ${end}`);
+  const dry=["муку","разрыхлитель"]; if(has("cocoa"))dry.push("какао"); if(sift)dry.push("пряности ("+A.items.map(x=>x[0].replace(/ молот(ая|ый)/,"").toLowerCase()).join(", ")+")");
+  S.push(`${(dry.slice(0,-1).join(", ")+" и "+dry[dry.length-1]).replace(/^м/,"М")} смешать и просеять. Добавить в яичную смесь, оптимально — под венчик, чтобы избежать образования комков.`);
+  if(has("noisette")) S.push(`Нуазет приготовить заранее: сливочное масло прогреть до орехового цвета и запаха. Сливочное масло растопить, соединить с нуазетом, нагреть примерно до 40–45 °С и ввести в яично-мучную смесь.`);
+  else if(has("paste")) S.push(`Сливочное масло растопить, нагревая примерно до 40–45 °С, размешать с фундучной пастой до однородности и ввести в яично-мучную смесь.`);
+  else S.push(`Сливочное масло растопить, нагревая примерно до 40–45 °С, и ввести в яично-мучную смесь.`);
+  if(r.adds.length){
+    const prep=[];
+    if(r.adds.some(a=>/Цукаты/.test(a.n))) prep.push("Цукаты заранее вымочить в роме или ликёре (или взять мягкие цукаты), с вечера обсушить на решётке и обвалять в муке.");
+    if(r.adds.some(a=>a.n==="Фундук")) prep.push("Фундук обжарить и порубить.");
+    if(r.adds.some(a=>a.n==="Грецкий орех")) prep.push("Грецкий орех порубить.");
+    if(r.adds.some(a=>/Тёмный шоколад/.test(a.n))) prep.push("Шоколад взять 55–60 %, не кислый и не горький.");
+    S.push(prep.join(" ")+(prep.length?" ":"")+`Добавки (${r.adds.map(a=>a.n.toLowerCase()).join(", ")}) ввести в тесто последними и вмешать вручную лопаткой.`);
+  }
+  S.push("Готовое тесто переложить в кондитерский мешок без насадки, для последующего порционирования.");
+  return S;
+}
+function renderPrint(){
+  const r=PRECS[PSEL], w=+document.getElementById("pWeight").value||0, f=w>0?w/1000:1;
+  const g=x=>fmt(x*f), per=w>0?`на ${fmt(w)} г теста без добавок`:"на 1 кг теста без добавок";
+  document.getElementById("pSel").innerHTML=PRECS.map((x,i)=>`<button type="button" class="cit h ${x.hue}${i===PSEL?" on":""}" data-i="${i}" aria-pressed="${i===PSEL}">${esc(x.name)}</button>`).join("");
+  const m=compMerge(r).ch, v=id=>m[id]!==undefined?m[id]:BASE[id];
+  const pc=(x,t)=>t?String(+(x/t*100).toFixed(1)).replace(".",",")+" %":"";
+  const row=(n,q,p)=>`<tr><td>${esc(n)}</td><td class="n">${q} г</td><td class="n pp">${p||""}</td></tr>`;
+  const head=`<tr class="phead"><td></td><td class="n">Вес</td><td class="n pp">Доля</td></tr>`;
+  const A=r.aroma?AROMA[r.aroma.ai]:null;
+  const S=r.soak&&SOAKREC[r.soak.rec], C=r.coat&&COATREC[r.coat.rec];
+  const cn=r.coat?(coatNorm(r.coat.n,"pour")||{}).p?["полив сверху",coatNorm(r.coat.n,"pour")]:(coatNorm(r.coat.n,"dip")||{}).p?["окунание",coatNorm(r.coat.n,"dip")]:null:null;
+  const D=[];let tot=0;
+  for(const [id,name] of ING){const x=(lo(v(id))+hi(v(id)))/2*K;if(!x)continue;tot+=x;if(id==="liquid"){const c=D.find(d=>d[0]==="cream");if(c){c[2]+=x;continue;}}D.push([id,name,x]);}
+  const aSum=A?A.items.reduce((t,x)=>t+x[1],0):0, adSum=r.adds.reduce((t,a)=>t+a.g,0), all=tot+aSum+adSum;
+  let L=`<div><h4>Тесто</h4><table class="ptab"><tbody>${head}${D.map(([id,n,x])=>row(n,g(x),pc(x,all))).join("")}<tr class="ptot"><td>Тесто без добавок</td><td class="n">${g(tot)} г</td><td class="n pp">${pc(tot,all)}</td></tr></tbody></table></div>`;
+  if(A) L+=`<div><h4>Аромат</h4><table class="ptab"><tbody>${A.items.map(x=>row(x[0],g(x[1]),pc(x[1],all))).join("")}</tbody></table></div>`;
+  if(r.adds.length) L+=`<div><h4>Добавки</h4><table class="ptab"><tbody>${r.adds.map(a=>row(a.n,g(a.g),pc(a.g,all))).join("")}</tbody></table></div>`;
+  if(A||r.adds.length) L+=`<p class="pnote pdol">Доля — от всего теста вместе с ароматом и добавками: ${g(all)} г.</p>`;
+  L+=`<div><h4>Для масляной дорожки, по желанию</h4><table class="ptab"><tbody>${row("Масло сливочное 82,5 %",g(BUTTER_LINE*K),"")}</tbody></table></div>`;
+  if(S) L+=`<div><h4>${esc(r.soak.n)}</h4><table class="ptab"><tbody>${S.items.map(x=>row(x[0],g(r.soak.g*x[1]/S.per),pc(x[1],S.per))).join("")}<tr class="ptot"><td>Всего пропитки</td><td class="n">${g(r.soak.g)} г</td><td class="n pp">100 %</td></tr></tbody></table><p class="pnote">Пропитки — ${g(r.soak.g)} г на кексы, которые получатся из ${w>0?fmt(w)+" г":"1 кг"} теста без добавок.</p></div>`;
+  if(C) L+=`<div><h4>${esc(r.coat.n)}</h4><table class="ptab"><tbody>${C.items.map(x=>row(x[0],fmt(x[1]),fmt(x[1])+" %")).join("")}</tbody></table><p class="pnote">Граммы — на 100 г покрытия.${cn?(cn[0]==="полив сверху"?` При поливе покрытия нужно ${fmt(cn[1].p)} % от массы кекса.`:` Покрытия нужно ${fmt(cn[1].p)} % от массы кекса.`):""} Сколько покрытия нужно под вашу форму, посчитает «Ваш рецепт».</p></div>`;
+  // диаграмма «Из чего состоит тесто»
+  const grpOf={sugar:"Сахар",invert:"Сахар",egg:"Яйцо",cream:"Сливки",liquid:"Сливки",salt:"Мука, разрыхлитель и соль",flour:"Мука, разрыхлитель и соль",bp:"Мука, разрыхлитель и соль",almond:"Миндальная мука",cocoa:"Какао",butter:"Сливочное масло",noisette:"Нуазет",paste:"Фундучная паста"};
+  const segs={};D.forEach(([id,,x])=>{const k=grpOf[id]||"Прочее";segs[k]=(segs[k]||0)+x;});
+  if(aSum)segs["Аромат"]=aSum; if(adSum)segs["Добавки"]=adSum;
+  const COLS={"Сахар":"#f2c94c","Яйцо":"#f5a25d","Сливки":"#c9b79c","Мука, разрыхлитель и соль":"#e8d7b5","Миндальная мука":"#d9b48a","Какао":"#7a4a32","Сливочное масло":"#fff1a6","Нуазет":"#c98a3c","Фундучная паста":"#b0804e","Аромат":"#8fb36a","Добавки":"#d46a7e","Прочее":"#999"};
+  let a0=-Math.PI/2,arcs="",leg="";const cx=110,cy=110,R1=106,R0=46;
+  for(const [k,x] of Object.entries(segs)){const a1=a0+2*Math.PI*x/all,big=a1-a0>Math.PI?1:0;
+    const p=(a,r)=>[(cx+r*Math.cos(a)).toFixed(1),(cy+r*Math.sin(a)).toFixed(1)];
+    const [x0,y0]=p(a0,R1),[x1,y1]=p(a1,R1),[x2,y2]=p(a1,R0),[x3,y3]=p(a0,R0);
+    arcs+=`<path d="M${x0},${y0} A${R1},${R1} 0 ${big} 1 ${x1},${y1} L${x2},${y2} A${R0},${R0} 0 ${big} 0 ${x3},${y3} Z" fill="${COLS[k]}" stroke="var(--surface)" stroke-width="2"><title>${k}: ${pc(x,all)}</title></path>`;
+    leg+=`<li><i style="background:${COLS[k]}"></i>${k}<b>${pc(x,all)}</b></li>`;a0=a1;}
+  const chart=`<div class="pchart"><h4>Из чего состоит тесто</h4><svg viewBox="0 0 220 220" role="img" aria-label="Из чего состоит тесто">${arcs}<text x="110" y="108" text-anchor="middle" class="pct1">${g(all)} г</text><text x="110" y="124" text-anchor="middle" class="pct2">всё тесто</text></svg><ul class="pleg">${leg}</ul></div>`;
+  const steps=pSteps(r,g);
+  let after=[];
+  const cnP=r.coat?coatNorm(r.coat.n,"pour"):null;
+  const soakAlc=!!(S&&S.items.some(x=>/\d°/.test(x[0])));
+  const sugar=r.coat&&/сахарная глазурь/i.test(r.coat.n);
+  if(S) after.push(`Пропитку приготовить заранее. ${S.why}`);
+  if(sugar){
+    after.push(S?`Горячий кекс сразу после выпечки пропитать ${soakAlc?"":"тёплой "}пропиткой.`:"Кекс вынуть из формы.");
+    after.push("Сразу после этого покрыть кекс глазурью и подсушить 2–3 минуты в духовке при 220 °С, чтобы глазурь закрепилась.");
+    after.push("Кекс быстро охладить до +4 °С.");
+  }else{
+    after.push(S?`Горячий кекс сразу после выпечки пропитать ${soakAlc?"":"тёплой "}пропиткой и быстро охладить до +4 °С или заморозить.`:"Готовый кекс быстро охладить до +4 °С или заморозить.");
+    if(C){after.push("Кекс хранят и замораживают без покрытия. Покрывают его перед продажей.");after.push(`Покрытие приготовить. ${C.why.split(" Шоколадную глазурь наносят перед продажей")[0]}`);after.push(`Покрыть одним из двух способов. Полив: покрытие льют на холодный или замороженный кекс сверху, оно закрывает верх и небольшую часть боков${cnP?`, покрытия нужно ${fmt(cnP.p)} % от массы кекса`:""}. Окунание: кекс накалывают на шпажку и окунают в покрытие; замороженный кекс окунают прямо из морозильника, не размораживая — он плотный и не рвётся на шпажке. Сколько покрытия нужно при окунании, впишите в «Ваш рецепт».`);after.push("Покрытый замороженный кекс размораживают при +4 °С.");}
+  }
+  const SUGAR_NOTE=sugar?`<div class="pnote pbox"><b>Сахарная глазурь — сразу после выпечки, а не перед продажей.</b> В сахарной глазури много сахара. Когда кекс из холода попадает в тепло, на нём оседает влага, сахар растворяется, и глазурь становится липкой. Поэтому сахарной глазурью кекс покрывают сразу после выпечки и закрепляют в духовке. Решите сами, как вам удобнее: если кекс продадите или подарите в ближайшие дни, покройте его глазурью сразу; если хотите заморозить кекс про запас, замораживайте его без глазури и перед продажей покройте шоколадом.</div>`:"";
+  const R=`<div><h4>Приготовление теста</h4><ol>${steps.map(x=>`<li>${esc(x)}</li>`).join("")}</ol></div>
+   <div><h4>Формы</h4><ul><li>Силиконовые формы смазать растительным маслом и протереть бумажной салфеткой или смазать смесью для покрытия форм.</li><li>Металлические формы смазать смесью для подготовки форм или вложить тефлоновый вкладыш.</li><li>Тесто выложить в формы. В таком виде тесто можно хранить в холодильнике 4–12 часов.${r.adds.length?" Тесто с добавками лучше выдержать при +4 °С 4–12 часов: так добавки не осядут на дно.":""}</li></ul>
+   <p class="pnote" style="margin-top:8px">Сколько теста положить в вашу форму, посчитает блок «Сколько теста в мою форму» в разделе «Форма» конструктора: впишите размеры формы и число форм. Тесто поднимается в 2,5–3 раза от первоначального объёма.</p></div>
+   <div><h4>Масляная дорожка, по желанию</h4><p class="pnote" style="margin:0">Сливочное масло способствует красивому раскрытию кекса при выпекании. Масло взбить насадкой «лопатка» до состояния помады, выложить в кондитерский мешок, срезать кончик на 1,5–2 мм и отсадить маслом линию по всей длине кекса. Кексам с ровным верхом дорожка не нужна.</p></div>
+   <div><h4>Выпечка</h4><p class="pnote" style="margin:0">Выпекать в конвекционной печи при 150 °С (загрузка при 165 °С) 50–55 минут — для формы Silikomart (Силикомарт) 160×80×40 мм, 400 г теста.</p></div>
+   <div><h4>После выпечки</h4><ol>${after.map(x=>`<li>${esc(x)}</li>`).join("")}</ol>${SUGAR_NOTE}</div>
+   <div><h4>Хранение</h4><ul><li>Сырое тесто можно заморозить в формах до 20 дней при −18 °С, накрыв крышкой или плёнкой. Накануне вечером переложить в холодильник и на следующий день испечь. Кексы меньше 400 г можно печь прямо из морозильника: первые 10 минут — при температуре на 20–25 °С ниже.</li><li>Готовые кексы без покрытия — 60–90 дней при −18 °С.</li><li>Готовые кексы без покрытия — 3–4 дня при +4 °С при постоянной температуре.</li>${C&&!sugar?"<li>Покрывают кексы перед продажей.</li>":""}<li>Подавать кекс при комнатной температуре, 22–24 °С.</li></ul></div>`;
+  document.getElementById("pCard").innerHTML=`<h3>${r===PRECS[0]?"Базовый кекс":"Кекс «"+esc(r.name)+"»"}</h3><p class="psub">Тесто и добавки — ${per}. Пропитка и покрытие — на кексы, которые получатся из этого теста.</p><div class="pgrid"><div class="ptop"><div class="pcol pL">${L}</div>${chart}</div><div class="pcol psteps">${R}</div></div>`;
+}
+document.getElementById("pSel").addEventListener("click",e=>{const b=e.target.closest("[data-i]");if(!b)return;PSEL=+b.dataset.i;document.getElementById("pMsg").textContent="";renderPrint();});
+document.getElementById("pWeight").addEventListener("input",renderPrint);
+document.getElementById("pCopy").addEventListener("click",()=>{
+  const card=document.getElementById("pCard"), msg=document.getElementById("pMsg"), text=card.innerText;
+  const sel=()=>{const rg=document.createRange();rg.selectNodeContents(card);const s=getSelection();s.removeAllRanges();s.addRange(rg);msg.textContent="Рецепт выделен — нажмите Cmd и C, чтобы скопировать.";};
+  try{navigator.clipboard.writeText(text).then(()=>{msg.textContent="Рецепт скопирован. Вставьте его в Word или Pages.";},sel);}catch(e){sel();}
+});
+renderPrint();
+/* ---------- сколько теста в мою форму ---------- */
+(function(){
+  const opt=(arr,f)=>arr.map((x,i)=>`<option value="${i}">${esc(f(x))}</option>`).join("");
+  const $=id=>document.getElementById(id);
+  $("fillIn").innerHTML=`
+   <label for="fPreset">Подставить пример<select id="fPreset"><option value="">— свои размеры —</option>${opt(PRESETS,p=>p.n.replace("Пример: ",""))}</select></label>
+   <label for="fShape">Тип формы<select id="fShape">${opt(SHAPES,s=>s.n)}</select></label>
+   <label for="fType">Что печём<select id="fType">${opt(PTYPES,p=>p.n+" · "+p.range+" г на см² дна")}</select></label>
+   <label for="fNorm">Норма, г теста на 1 см² дна<input id="fNorm" type="number" min="0.5" max="6" step="0.05" value="2.8"></label>
+   <label class="gL" for="fL">Длина, мм<input id="fL" type="number" min="10" value="120"></label>
+   <label class="gW" for="fW">Ширина, мм<input id="fW" type="number" min="10" value="70"></label>
+   <label class="gD" for="fD">Диаметр, мм<input id="fD" type="number" min="10" value="200"></label>
+   <label class="gDi" for="fDi">Диаметр трубки, мм<input id="fDi" type="number" min="5" value="80"></label>
+   <label for="fCount">Сколько форм<input id="fCount" type="number" min="1" max="500" step="1" value="6"></label>`;
+  function renderFill(){
+    const shape=SHAPES[+$("fShape").value].id;
+    for(const [c,on] of [["gL",shape==="rect"],["gW",shape==="rect"],["gD",shape!=="rect"],["gDi",shape==="ring"]]) document.querySelector("#fillIn ."+c).hidden=!on;
+    const G=geom(shape,+$("fL").value,+$("fW").value,+$("fD").value,+$("fDi").value,10);
+    const norm=+$("fNorm").value||2.8, pt=PTYPES[+$("fType").value], n=Math.max(1,+$("fCount").value||1);
+    const one=G.base*norm;
+    $("fillOut").innerHTML=`<div class="fillres">
+      <div class="card2"><div class="lbl">Тесто в одну форму</div><div class="big">${tip(fmt(one)+" г",`Площадь дна ${fmt(G.base)} см² (${SHAPES.find(x=>x.id===shape).n.toLowerCase()}, ${G.desc}) × ${String(norm).replace(".",",")} г на 1 см². Норма для «${pt.n.toLowerCase()}» — ${pt.range} г на 1 см² дна.`,false)}</div></div>
+      <div class="card2"><div class="lbl">Всего теста на ${n} ${n%10===1&&n%100!==11?"форму":(n%10>=2&&n%10<=4&&(n%100<10||n%100>=20))?"формы":"форм"}</div><div class="big">${tip(fmt(one*n)+" г",`${n} × ${fmt(one)} г.`,false)}</div></div>
+      <p class="what">Это тесто вместе с добавками. Норму можно поправить под свою пробу. Тесто поднимается в 2,5–3 раза, поэтому форму заполняют не до края.</p></div>`;
+  }
+  $("fillIn").addEventListener("input",e=>{
+    if(e.target.id==="fType") $("fNorm").value=PTYPES[+$("fType").value].norm;
+    if(e.target.id==="fPreset"&&$("fPreset").value!==""){const p=PRESETS[+$("fPreset").value];
+      $("fShape").value=String(SHAPES.findIndex(s=>s.id===p.s));
+      for(const k of ["L","W","D","Di"]) if(p[k]!==undefined) $("f"+k).value=p[k];
+      const ti=PTYPES.findIndex(t=>t.id===p.t);$("fType").value=String(ti);$("fNorm").value=PTYPES[ti].norm;}
+    renderFill();
+  });
+  renderFill();
+})();
+/* ---------- переходы по ссылкам внутри страницы ---------- */
+/* закладки: разделы конструктора по вкладкам, как в картотеке */
+const PANES=[["start","Начало"],["steps","Ступени"],["form","Форма"],["pairs","Сочетания"],["build","Ваш рецепт"],["print","Рецепты для печати"]];
+const STEPS=["l2","l3","l4","l5","l6"];
+(function(){
+  const $=id=>document.getElementById(id), wrap=document.querySelector(".wrap"), header=wrap.querySelector("header");
+  const bar=document.createElement("nav");bar.className="tabsbar";bar.setAttribute("role","tablist");bar.setAttribute("aria-label","Разделы конструктора");
+  bar.innerHTML=PANES.map(([k,n])=>`<button type="button" role="tab" data-pane="${k}" id="tab-${k}">${n}</button>`).join("");
+  const P={};PANES.forEach(([k])=>{const p=document.createElement("div");p.className="tabpanel";p.dataset.pane=k;p.setAttribute("role","tabpanel");p.setAttribute("aria-labelledby","tab-"+k);P[k]=p;});
+  header.after(bar);let prev=bar;PANES.forEach(([k])=>{prev.after(P[k]);prev=P[k];});
+  const lead=header.querySelector(".lead"), route=header.querySelector("nav.route"), stairs=$("layers").nextElementSibling, layersNav=document.querySelector("nav.layers"), key=document.querySelector(".key"), foot=document.querySelector(".foot");
+  P.start.append(lead,$("wheel"),$("recipes"),$("evo"));
+  P.steps.append($("layers"),route,stairs,layersNav,...STEPS.map(id=>$(id)),key);
+  P.form.append($("l7"));P.pairs.append($("graph"));P.build.append($("build"));P.print.append($("print"));
+  prev.after(foot);
+  STEPS.forEach(id=>$(id).classList.add("step"));
+  const names={l2:"Аромат",l3:"Тесто",l4:"Добавки",l5:"Пропитка",l6:"Покрытие"};
+  layersNav.innerHTML=STEPS.map((id,i)=>`<button type="button" data-step="${id}"><b>${i+1}</b>${names[id]}</button>`).join("");
+  window.showStep=id=>{STEPS.forEach(s=>$(s).hidden=s!==id);layersNav.querySelectorAll("button").forEach(b=>b.setAttribute("aria-selected",String(b.dataset.step===id)));};
+  window.showPane=(k,keep)=>{PANES.forEach(([x])=>P[x].hidden=x!==k);bar.querySelectorAll("button").forEach(b=>b.setAttribute("aria-selected",String(b.dataset.pane===k)));
+    try{localStorage.setItem("keks-pane",k);}catch(e){}
+    if(!keep){const y=bar.getBoundingClientRect().top+window.scrollY-8;if(window.scrollY>y)window.scrollTo({top:y});}};
+  bar.addEventListener("click",e=>{const b=e.target.closest("button[data-pane]");if(b)showPane(b.dataset.pane);});
+  layersNav.addEventListener("click",e=>{const b=e.target.closest("button[data-step]");if(b)showStep(b.dataset.step);});
+  showStep("l2");
+  let start="start";try{const v=localStorage.getItem("keks-pane");if(v&&P[v])start=v;}catch(e){}
+  const h=location.hash.slice(1);if(h){const t=$(h);const pp=t&&t.closest(".tabpanel");if(pp)start=pp.dataset.pane;if(STEPS.includes(h))showStep(h);}
+  showPane(start,true);
+})();
+document.addEventListener("click",e=>{const tb=e.target.closest("a[data-tab]");if(tb)setMode(tb.dataset.tab);const a=e.target.closest('a[href^="#"]');if(!a)return;const id=a.getAttribute("href").slice(1),t=document.getElementById(id);if(!t)return;e.preventDefault();
+  const pp=t.closest(".tabpanel");if(pp)showPane(pp.dataset.pane,true);const st=STEPS.includes(id)?id:(t.closest("section.step")||{}).id;if(st)showStep(st);
+  requestAnimationFrame(()=>t.scrollIntoView({behavior:"smooth",block:"start"}));});
+/* ---------- кольца ступеней: подсветка кольца и строки вместе ---------- */
+document.querySelectorAll(".ringbox [data-k]").forEach(el=>{const k=el.dataset.k;
+  el.addEventListener("mouseenter",()=>document.querySelectorAll(`.ringbox [data-k="${k}"]`).forEach(x=>x.classList.add("hl")));
+  el.addEventListener("mouseleave",()=>document.querySelectorAll(`.ringbox [data-k="${k}"]`).forEach(x=>x.classList.remove("hl")));});
+</script>
+</body></html>
